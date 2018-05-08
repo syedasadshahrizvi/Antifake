@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.antifake.mapper.CheckMapper" >
+  <resultMap id="BaseResultMap" type="com.antifake.model.Check" >
+ 	<id column="check_id" property="checkId" jdbcType="INTEGER" />
+    <result column="company_code" property="companyCode" jdbcType="VARCHAR" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="count" property="count" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="query_time" property="queryTime" jdbcType="DATE"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    check_id,company_code, product_code, count, code, query_time
+  </sql>
+  
+  <insert id="insertList" parameterType="java.util.ArrayList" >
+    insert into antifake_check
+		(company_code,product_code,count,code)  
+		values   
+		<foreach item="check" collection="listCheck"  separator="," >  
+		(  
+		#{check.companyCode,jdbcType=VARCHAR},  
+		#{check.productCode,jdbcType=VARCHAR},
+		#{check.count,jdbcType=VARCHAR},
+		#{check.code,jdbcType=VARCHAR}
+		)  
+		</foreach> 
+  </insert>
+   <select id="queryCheck" resultMap="BaseResultMap" parameterType="com.antifake.model.Check" >
+    select 
+    <include refid="Base_Column_List" />
+    from antifake_check
+    where company_code = #{check.companyCode,jdbcType=VARCHAR} and product_code = #{check.productCode,jdbcType=VARCHAR} and code = #{check.code,jdbcType=VARCHAR}
+  </select>
+  <update id="updateCount" parameterType="com.antifake.model.Check">
+  	update antifake_check set count=#{check.count} where check_id = #{check.checkId}
+  </update>
+</mapper>

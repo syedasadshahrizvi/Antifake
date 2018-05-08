@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.antifake.mapper.CompanyMapper" >
+  <resultMap id="BaseResultMap" type="com.antifake.model.Company" >
+    <id column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="register_id" property="registerId" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="business_license" property="businessLicense" jdbcType="VARCHAR" />
+    <result column="company_code" property="companyCode" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    company_id,user_id ,company_name,register_id, level, status, business_license,company_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from antifake_company
+    where company_id = #{companyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from antifake_company
+    where company_id = #{companyId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.antifake.model.Company" >
+    insert into antifake_company (company_id,user_id,company_name, register_id, level, 
+      status, business_license)
+    values (#{companyId,jdbcType=INTEGER},#{userId,jdbcType=VARCHAR},#{companyName,jdbcType=VARCHAR}, #{registerId,jdbcType=VARCHAR}, #{level,jdbcType=TINYINT}, 
+      #{status,jdbcType=TINYINT}, #{businessLicense,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.antifake.model.Company" useGeneratedKeys="true" keyProperty="companyId" keyColumn="company_id">
+    insert into antifake_company
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="companyId != null" >
+        company_id,
+      </if>
+       <if test="userId != null" >
+        user_id,
+      </if>
+       <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="registerId != null" >
+        register_id,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="businessLicense != null" >
+        business_license,
+      </if>
+      <if test="companyCode != null" >
+        company_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=INTEGER},
+      </if>
+      <if test="registerId != null" >
+        #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="businessLicense != null" >
+        #{businessLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null" >
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.antifake.model.Company" >
+    update antifake_company
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="registerId != null" >
+        register_id = #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="businessLicense != null" >
+        business_license = #{businessLicense,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where company_id = #{companyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.antifake.model.Company" >
+    update antifake_company
+    set user_id = #{userId,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      register_id = #{registerId,jdbcType=VARCHAR},
+      level = #{level,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      business_license = #{businessLicense,jdbcType=VARCHAR}
+    where company_id = #{companyId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByRegisterId" resultType="integer" parameterType="com.antifake.model.Company">
+  	select count(company_id) from antifake_company where register_id = #{registerId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectCompanyByRegisterId" resultMap="BaseResultMap" parameterType="java.lang.String">
+	  	 select 
+	    <include refid="Base_Column_List" />
+	    from antifake_company
+	    where company_id = #{registerId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByUserId" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from antifake_company
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectList">
+  	select 
+    <include refid="Base_Column_List" />
+    from antifake_company
+    <where>
+    	<if test="status != null">
+    		status = #{status}
+    	</if>
+    	<if test="userId != null">
+    		and user_id = #{userId}
+    	</if>
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.antifake.mapper.UserKeyMapper" >
+  <resultMap id="BaseResultMap" type="com.antifake.model.UserKey" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="public_key" property="publicKey" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, public_key
+  </sql>
+  <insert id="insertUserKey" parameterType="com.antifake.model.UserKey" >
+    insert into antifake_user_key (user_id, public_key
+      )
+    values (#{userId,jdbcType=VARCHAR}, #{publicKey,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <select id="selectKeyByUid" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select <include refid="Base_Column_List"/> from antifake_user_key where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+</mapper>
