@@ -1,5 +1,7 @@
 package com.antifake.controller;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -66,9 +68,8 @@ public class UserController {
 			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(),
 					bindingResult.getFieldError().getDefaultMessage());
 		}
-		// Boolean checkCode =
-		// codeService.checkCode(userForm.getTelphone(),userForm.getCode());
-		if (false) {
+		Boolean checkCode = codeService.checkCode(userForm.getTelphone(),userForm.getCode());
+		if (!checkCode) {
 			return ResultVOUtil.success(ResultEnum.CODE_ERROR.getCode(), ResultEnum.CODE_ERROR.getMessage());
 		}
 		User userconvert = UserForm2UserModelConverter.convert(userForm);
@@ -90,7 +91,7 @@ public class UserController {
 	 * @author JZR
 	 * @date 2018年4月10日
 	 */
-	@GetMapping("/repetition")
+	@PostMapping("/repetition")
 	public ResultVO repetition(@Valid UserRepetition userRepetition, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			log.error("【用户信息重复判断】参数不正确,UserRepetition={}", userRepetition);
@@ -138,11 +139,11 @@ public class UserController {
 			response.setHeader(r_token, get32uuid);
 		} else {
 			Cookie cookie = new Cookie(u_token, get32uuid);
-			cookie.setMaxAge(30 * 24 * 60 * 60);// 设置为30min
+			cookie.setMaxAge(30 * 24 * 60 * 60);// 设置为30天
 			cookie.setPath("/");
 			response.addCookie(cookie);
 		}
-		redisTemplate.opsForValue().set(get32uuid, );
+		redisTemplate.opsForValue().set(get32uuid, userResult.getUserId(),30,TimeUnit.DAYS);
 		if (userResult == null) {
 			return ResultVOUtil.success(ResultEnum.LOGIN_ERROE.getCode(), ResultEnum.LOGIN_ERROE.getMessage());
 		}
@@ -165,7 +166,6 @@ public class UserController {
 			return ResultVOUtil.success(ResultEnum.CODE_ERROR.getCode(), ResultEnum.CODE_ERROR.getMessage());
 		UserVO userVO = userService.findByTelphone(telphone);
 		// 添加token
-		// 添加token
 		String get32uuid = UUIDUtil.get32UUID();
 		if (app) {
 			response.setHeader(r_token, get32uuid);
@@ -175,7 +175,7 @@ public class UserController {
 			cookie.setPath("/");
 			response.addCookie(cookie);
 		}
-		redisTemplate.opsForValue().set(get32uuid, );
+		redisTemplate.opsForValue().set(get32uuid, userVO.getUserId(),30,TimeUnit.DAYS);
 		return ResultVOUtil.success(userVO);
 	}
 

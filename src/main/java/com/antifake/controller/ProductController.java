@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,8 +43,8 @@ public class ProductController {
 	  * @author JZR  
 	  * @date 2018年5月7日
 	  */
-	@GetMapping("/getlist")
-	public ResultVO<List<Product>> listProduct(@RequestParam("companyId")Integer companyId){
+	@GetMapping("/getlist/{companyId}")
+	public ResultVO<List<Product>> listProduct(@PathVariable("companyId")Integer companyId){
 		List<Product> productList = productService.getProductList(companyId);
 		return ResultVOUtil.success(productList);
 	}
@@ -53,8 +54,8 @@ public class ProductController {
 	  * @author JZR  
 	  * @date 2018年5月7日
 	  */
-	@GetMapping("/get")
-	public ResultVO<Product> getProduct(@RequestParam("productId")Integer productId){
+	@GetMapping("/get/{productId}")
+	public ResultVO<Product> getProduct(@PathVariable("productId")Integer productId){
 		Product product = productService.getProductBypId(productId);
 		return ResultVOUtil.success(product);
 	}

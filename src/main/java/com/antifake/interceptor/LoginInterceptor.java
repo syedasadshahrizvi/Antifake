@@ -12,8 +12,11 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.antifake.enums.ResultEnum;
 import com.antifake.model.Role;
 import com.antifake.service.RoleService;
+import com.antifake.utils.ResultVOUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
@@ -33,6 +36,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		if (handler instanceof HandlerMethod) {
+			ObjectMapper mapper = new ObjectMapper();
 			LoginRequired loginRequired = findAnnotation((HandlerMethod) handler, LoginRequired.class);
 			if (loginRequired == null) {
 				return true;
@@ -42,7 +46,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 				// 认证
 				String userId = getToken(request);
 				if(userId==null) {
-					response.getWriter().write("a请先登陆！");
+					String jsonLogin = mapper.writeValueAsString(ResultVOUtil.error(ResultEnum.LOGIN_NULL.getCode(), ResultEnum.LOGIN_NULL.getMessage()));
+					response.getWriter().write(jsonLogin);
 					return false;
 				}
 				if (checkRole) {// 做授权操作
@@ -55,7 +60,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 				} else if (!checkRole) {
 					return true;
 				}
-				response.getWriter().write("a没有权限访问！");
+				String jsonLogin = mapper.writeValueAsString(ResultVOUtil.error(ResultEnum.AUTHO_ERROR.getCode(), ResultEnum.AUTHO_ERROR.getMessage()));
+				response.getWriter().write(jsonLogin);
 				return false;
 			}
 		} else {

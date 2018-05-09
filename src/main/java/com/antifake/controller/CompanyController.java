@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,8 +61,8 @@ public class CompanyController {
 	 * @author JZR  
 	 * @date 2018年4月12日 
 	 */
-	@GetMapping("/listbyuid")
-	public ResultVO<List<Company>> listByUserId(@RequestParam(name = "userid")String userId){
+	@GetMapping("/listbyuid/{userId}")
+	public ResultVO<List<Company>> listByUserId(@PathVariable(name = "userId")String userId){
 		List<Company> companyList = companyService.selectCompanyByUserid(userId);
 		return ResultVOUtil.success(companyList);
 	}
@@ -71,8 +72,8 @@ public class CompanyController {
 	 * @author JZR  
 	 * @date 2018年4月12日 
 	 */
-	@PostMapping("/changelevel")
-	public ResultVO changeLevel(@RequestParam Integer companyId,@RequestParam Byte level){
+	@PostMapping("/changelevel/{companyId}/{level}")
+	public ResultVO changeLevel(@PathVariable(name="companyId") Integer companyId,@PathVariable(name="level") Byte level){
 		Company company = new Company();
 		company.setCompanyId(companyId);
 		company.setLevel(level);
@@ -115,8 +116,8 @@ public class CompanyController {
 	 * @author JZR  
 	 * @date 2018年4月12日 
 	 */
-	@GetMapping("/check")
-	public ResultVO checkCompany(Integer companyId,Byte status) {
+	@GetMapping("/check/{companyId}/{status}")
+	public ResultVO checkCompany(@PathVariable(name="companyId")Integer companyId,@PathVariable(name="status")Byte status) {
 		Company company = new Company();
 		company.setCompanyId(companyId);
 		company.setStatus(status);

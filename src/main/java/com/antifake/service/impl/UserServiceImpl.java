@@ -70,14 +70,17 @@ public class UserServiceImpl implements UserService {
 	public UserVO loginByUsernameOrtelPhone(User userconvert) {
 
 		// 正则匹配手机号
-		UserVO userVO = null;
+		UserVO userVO = new UserVO();
 		if (RegExUtils.isPhone(userconvert.getUsername())) {
 			userconvert.setTelphone(userconvert.getUsername());
 			userconvert.setUsername(null);
 		}
 		User user = userMapper.queryUserByUsernameOrTelphone(userconvert);
 		if (MD5Utils.hash(userconvert.getPassword()).equals(user.getPassword())) {
-			userVO = new UserVO();
+			userVO.setUserId(user.getUserId());
+			userVO.setNickname(user.getNickname());
+			userVO.setTelphone(user.getTelphone());
+			userVO.setUsername(user.getUsername());
 			userVO.setStatus(user.getStatus());
 		}
 
@@ -105,9 +108,16 @@ public class UserServiceImpl implements UserService {
 			userKeyMapper.insertUserKey(userKey);
 			//获取私钥
 			String privateKey = ECCUtilsBak.getPrivateKey(initKey);
+			userVO.setUserId(userId);
+			userVO.setTelphone(telphone);
 			userVO.setPrivateKey(privateKey);
+		}else {
+			userVO.setUserId(userResult.getUserId());
+			userVO.setNickname(userResult.getNickname());
+			userVO.setTelphone(userResult.getTelphone());
+			userVO.setUsername(userResult.getUsername());
+			userVO.setStatus(userResult.getStatus());
 		}
-		userVO.setStatus(userResult.getStatus());
 		return userVO;
 	}
 

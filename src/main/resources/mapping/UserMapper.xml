@@ -157,13 +157,13 @@
   </update>
   
   <select id="queryUserByUsernameOrTelphone" parameterType="com.antifake.model.User" resultMap="BaseResultMap">
-  	select user_id,username,telphone,password,status from antifake_user 
+  	select user_id,username,telphone,nickname,password,status from antifake_user 
   	<where>
   		<if test="user.username != null">
-  			and username = #{user.username}
+  			or username = #{user.username}
   		</if>
   		<if test="user.telphone != null">
-  			and telphone = #{user.telphone}
+  			or telphone = #{user.telphone}
   		</if>
   	</where>
   </select>
