@@ -1,7 +1,6 @@
 package com.antifake.service.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import com.antifake.mapper.CompanyMapper;
 import com.antifake.mapper.UserMapper;
 import com.antifake.model.Company;
 import com.antifake.service.CompanyService;
-import com.antifake.utils.ECCUtilsBak;
 
 @Service
 public class CompanyServiceImpl implements CompanyService{
@@ -63,19 +61,6 @@ public class CompanyServiceImpl implements CompanyService{
 	public List<Company> selectCompanyList(Integer status, String userId) {
 		List<Company> companyList = companyMapper.selectList(status,userId);
 		return companyList;
-	}
-
-	@Override
-	public Map<String, String> createKey(Integer companyId) {
-		Map<String, String> initKey = ECCUtilsBak.initKey();
-		//获取公钥
-		String publicKey = initKey.get("PUBLIC_KEY");
-		Company company = new Company();
-		company.setCompanyId(companyId);
-		company.setCompanyCode(publicKey);
-		//存储公钥
-		companyMapper.updateByPrimaryKeySelective(company);
-		return initKey;
 	}
 
 }

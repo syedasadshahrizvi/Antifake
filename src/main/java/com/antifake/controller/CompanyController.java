@@ -125,13 +125,4 @@ public class CompanyController {
 		return ResultVOUtil.success();
 	}
 	
-	/**
-	  * <p>Description: 生成密钥</p>
-	  * @author JZR  
-	  * @date 2018年4月17日
-	  */
-	public ResultVO<Map<String, String>> createKey(Integer companyId) {
-		Map<String,String> map = companyService.createKey(companyId);
-		return ResultVOUtil.success(map);
-	}
 }

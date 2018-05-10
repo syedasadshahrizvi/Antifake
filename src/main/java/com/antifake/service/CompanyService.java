@@ -42,11 +42,4 @@ public interface CompanyService {
 	 */
 	List<Company> selectCompanyList(Integer status, String userId);
 
-	/**
-	  * <p>Description: 创建密钥对</p>
-	  * @author JZR  
-	  * @date 2018年4月17日
-	  */
-	Map<String, String> createKey(Integer companyId);
-
 }

@@ -1,5 +1,6 @@
 package com.antifake.controller;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.Cookie;
@@ -28,6 +29,7 @@ import com.antifake.form.UserInfoForm;
 import com.antifake.form.UserRepetition;
 import com.antifake.model.User;
 import com.antifake.service.CodeService;
+import com.antifake.service.KeyService;
 import com.antifake.service.UserService;
 import com.antifake.utils.ResultVOUtil;
 import com.antifake.utils.UUIDUtil;
@@ -68,7 +70,7 @@ public class UserController {
 			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(),
 					bindingResult.getFieldError().getDefaultMessage());
 		}
-		Boolean checkCode = codeService.checkCode(userForm.getTelphone(),userForm.getCode());
+		Boolean checkCode = codeService.checkCode(userForm.getTelphone(), userForm.getCode());
 		if (!checkCode) {
 			return ResultVOUtil.success(ResultEnum.CODE_ERROR.getCode(), ResultEnum.CODE_ERROR.getMessage());
 		}
@@ -127,8 +129,8 @@ public class UserController {
 	@PostMapping("/pwdlogin")
 	public ResultVO<UserVO> pwdLogin(@RequestParam(required = true) String username,
 			@RequestParam(required = true) String password,
-			@RequestParam(name = "app", defaultValue = "false") Boolean app, HttpServletRequest request,
-			HttpServletResponse response) {
+			@RequestParam(name = "app", defaultValue = "false", required = false) Boolean app,
+			HttpServletRequest request, HttpServletResponse response) {
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
@@ -143,7 +145,7 @@ public class UserController {
 			cookie.setPath("/");
 			response.addCookie(cookie);
 		}
-		redisTemplate.opsForValue().set(get32uuid, userResult.getUserId(),30,TimeUnit.DAYS);
+		redisTemplate.opsForValue().set(get32uuid, userResult.getUserId(), 30, TimeUnit.DAYS);
 		if (userResult == null) {
 			return ResultVOUtil.success(ResultEnum.LOGIN_ERROE.getCode(), ResultEnum.LOGIN_ERROE.getMessage());
 		}
@@ -175,7 +177,7 @@ public class UserController {
 			cookie.setPath("/");
 			response.addCookie(cookie);
 		}
-		redisTemplate.opsForValue().set(get32uuid, userVO.getUserId(),30,TimeUnit.DAYS);
+		redisTemplate.opsForValue().set(get32uuid, userVO.getUserId(), 30, TimeUnit.DAYS);
 		return ResultVOUtil.success(userVO);
 	}
 
@@ -226,11 +228,11 @@ public class UserController {
 	 * @date 2018年4月11日
 	 */
 	@PostMapping("/editpwd2")
-	public ResultVO editPwdBycode(String userId, String telphone, String code, String newped) {
+	public ResultVO editPwdBycode(String userId, String telphone, String code, String newpwd) {
 		// 判断验证码
 		if (!codeService.checkCode(telphone, code))
 			return ResultVOUtil.success(ResultEnum.CODE_ERROR.getCode(), ResultEnum.CODE_ERROR.getMessage());
-		userService.updatePwdByCode(userId, newped);
+		userService.updatePwdByCode(userId, newpwd);
 		return ResultVOUtil.success();
 	}
 

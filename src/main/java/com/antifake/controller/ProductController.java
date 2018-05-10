@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/product")
 @Slf4j
 public class ProductController {
-	
+	 
 	@Autowired
 	private ProductService productService;
 	
@@ -60,25 +60,4 @@ public class ProductController {
 		return ResultVOUtil.success(product);
 	}
 	
-	/**
-	  * <p>Description: 生成防伪码</p>
-	  * @author JZR  
-	  * @date 2018年5月7日
-	  */
-	@PostMapping("/createcode")
-	public ResultVO<List<String>> createCode(String privateKey,String companyCode,String productCode,String template,Integer count) {
-		List<String> list = productService.encrypt(privateKey,companyCode,productCode,template,count);
-		return ResultVOUtil.success(list);
-	}
-	
-	/**
-	  * <p>Description: 校验防伪码</p>
-	  * @author JZR  
-	  * @date 2018年5月7日
-	  */
-	@GetMapping("/checked")
-	public ResultVO<Map<String,Object>> checkCode(@RequestParam("codeString")String codeString,@RequestParam(name="type",required = false)String type) throws Exception {
-		Map<String,Object> resultMap = productService.checkCode(codeString,type);
-		return ResultVOUtil.success(resultMap);
-	}
 }

@@ -14,20 +14,6 @@ public interface ProductService {
 	  */
 	Integer createProduct(Integer companyId,String companyCode,String productCode, String template);
 
-	/**
-	  * <p>Description: 加密</p>
-	  * @author JZR  
-	  * @date 2018年4月18日
-	  */
-	List<String> encrypt(String privateKey, String companyCode, String productCode, String template, Integer count);
-
-	/**
-	  * <p>Description: 解密</p>
-	  * @author JZR  
-	 * @param type 
-	  * @date 2018年4月23日
-	  */
-	Map<String,Object> checkCode(String codeString, String type) throws Exception;
 
 	/**
 	  * <p>Description: 查询模板</p>
