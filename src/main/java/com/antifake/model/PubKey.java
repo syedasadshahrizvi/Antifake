@@ -1,6 +1,6 @@
 package com.antifake.model;
 
-public class UserKey {
+public class PubKey {
 	
 	private Integer id;
 	

@@ -12,7 +12,7 @@
     <result column="sex" property="sex" jdbcType="TINYINT" />
     <result column="real_status" property="realStatus" jdbcType="TINYINT" />
     <result column="status" property="status" jdbcType="TINYINT" />
-    <collection property="userKeyList" ofType="com.antifake.model.UserKey" column="id">
+    <collection property="userKeyList" ofType="com.antifake.model.PubKey" column="id">
     	<id column="keyId" property="id"/>
     	<result column="uId" property="UserId"/>
     	<result column="pKey" property="publicKey"/>
@@ -25,15 +25,15 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from antifake_user
+    from account_user
     where user_id = #{userId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from antifake_user
+    delete from account_user
     where user_id = #{userId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.antifake.model.User" >
-    insert into antifake_user (user_id, username, password, 
+    insert into account_user (user_id, username, password, 
       nickname, telphone, id_card, 
       realname, sex, real_status, 
       status)
@@ -43,7 +43,7 @@
       #{status,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.antifake.model.User" >
-    insert into antifake_user
+    insert into account_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
         user_id,
@@ -110,7 +110,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.antifake.model.User" >
-    update antifake_user
+    update account_user
     <set >
       <if test="username != null" >
         username = #{username,jdbcType=VARCHAR},
@@ -143,7 +143,7 @@
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.antifake.model.User" >
-    update antifake_user
+    update account_user
     set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       nickname = #{nickname,jdbcType=VARCHAR},
@@ -157,7 +157,7 @@
   </update>
   
   <select id="queryUserByUsernameOrTelphone" parameterType="com.antifake.model.User" resultMap="BaseResultMap">
-  	select user_id,username,telphone,nickname,password,status from antifake_user 
+  	select user_id,username,telphone,nickname,password,status from account_user 
   	<where>
   		<if test="user.username != null">
   			or username = #{user.username}
@@ -168,10 +168,10 @@
   	</where>
   </select>
   <insert id="saveUserRole"	parameterType="com.antifake.model.Company">
-  	insert into antifake_user_role (user_id,role_id) values (#{userId},#{roleId})
+  	insert into account_user_role (user_id,role_id) values (#{userId},#{roleId})
   </insert>
   <select id="queryUserRole" resultType="integer">
-  	select count(id) from antifake_user_role where user_id = #{userId} and role_id=#{roleId}
+  	select count(id) from account_user_role where user_id = #{userId} and role_id=#{roleId}
   </select>
   
 </mapper>

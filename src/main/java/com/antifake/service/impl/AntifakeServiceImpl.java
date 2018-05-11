@@ -19,12 +19,12 @@ import com.antifake.mapper.ExpreMapper;
 import com.antifake.mapper.CipherMapper;
 import com.antifake.mapper.CompanyMapper;
 import com.antifake.mapper.ProductMapper;
-import com.antifake.mapper.UserKeyMapper;
+import com.antifake.mapper.PubKeyMapper;
 import com.antifake.model.Expre;
 import com.antifake.model.Cipher;
 import com.antifake.model.Company;
 import com.antifake.model.Product;
-import com.antifake.model.UserKey;
+import com.antifake.model.PubKey;
 import com.antifake.service.AntifakeService;
 import com.antifake.utils.ECCUtil;
 import com.antifake.utils.MD5Utils;
@@ -43,7 +43,7 @@ public class AntifakeServiceImpl implements AntifakeService{
 	private ExpreMapper expreMapper;
 	
 	@Autowired
-	private UserKeyMapper userKeyMapper;
+	private PubKeyMapper userKeyMapper;
 	
 	@Autowired
 	private StringRedisTemplate redisTemplate;
@@ -123,7 +123,7 @@ public class AntifakeServiceImpl implements AntifakeService{
 		//校验
 		//查询公钥
 		Company company = companyMapper.selectByPrimaryKey(cipher.getCompanyId());
-		List<UserKey> userKeyList = userKeyMapper.selectKeyByUid(company.getUserId());
+		List<PubKey> userKeyList = userKeyMapper.selectKeyByUid(company.getUserId());
 		String publicKey = userKeyList.get(0).getPublicKey();
 		//String[] splitCheck = StringUtils.split(resultCheck.getCount(), ".");
 		//完整密文

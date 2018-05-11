@@ -12,21 +12,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from antifake_role
+    from account_role
     where role_id = #{roleId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from antifake_role
+    delete from account_role
     where role_id = #{roleId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.antifake.model.Role" >
-    insert into antifake_role (role_id, role_name, description
+    insert into  (role_id, role_name, description
       )
     values (#{roleId,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.antifake.model.Role" >
-    insert into antifake_role
+    insert into account_role
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="roleId != null" >
         role_id,
@@ -51,7 +51,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.antifake.model.Role" >
-    update antifake_role
+    update account_role
     <set >
       <if test="roleName != null" >
         role_name = #{roleName,jdbcType=VARCHAR},
@@ -63,12 +63,12 @@
     where role_id = #{roleId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.antifake.model.Role" >
-    update antifake_role
+    update account_role
     set role_name = #{roleName,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR}
     where role_id = #{roleId,jdbcType=INTEGER}
   </update>
   <select id="queryByUid" resultMap="BaseResultMap">
-  	SELECT r.role_id,r.role_name FROM antifake_role r LEFT JOIN antifake_user_role ur ON r.role_id = ur.role_id WHERE ur.user_id = #{uid} 
+  	SELECT r.role_id,r.role_name FROM account_role r LEFT JOIN antifake_user_role ur ON r.role_id = ur.role_id WHERE ur.user_id = #{uid} 
   </select>
 </mapper>

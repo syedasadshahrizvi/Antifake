@@ -23,14 +23,14 @@ public class User {
 
     private Byte status;
     
-    private List<UserKey> userKeyList;
+    private List<PubKey> userKeyList;
     
 
-    public List<UserKey> getUserKeyList() {
+    public List<PubKey> getUserKeyList() {
 		return userKeyList;
 	}
 
-	public void setUserKeyList(List<UserKey> userKeyList) {
+	public void setUserKeyList(List<PubKey> userKeyList) {
 		this.userKeyList = userKeyList;
 	}
 

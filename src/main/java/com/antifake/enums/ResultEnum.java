@@ -17,7 +17,8 @@ public enum ResultEnum {
 	IMG_TYPE_ERROR(9,"图片类型不正确！"),
 	COMPANY_ERROR(10,"公司尚未审核通过！"),
 	LOGIN_NULL(11,"用户尚未登陆！"),
-	AUTHO_ERROR(12,"没有权限访问！");
+	AUTHO_ERROR(12,"没有权限访问！"),
+	TEL_CODE_ERROR(13,"验证码发送失败，请稍后再试！");
 	
 	private Integer code;
 	

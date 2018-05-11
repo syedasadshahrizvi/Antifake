@@ -1,6 +1,7 @@
 package com.antifake.service.impl;
 
 import java.security.KeyPair;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -9,11 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.antifake.VO.UserVO;
 import com.antifake.mapper.PrivateKeyMapper;
-import com.antifake.mapper.UserKeyMapper;
+import com.antifake.mapper.PubKeyMapper;
 import com.antifake.mapper.UserMapper;
 import com.antifake.model.PrivateKey;
 import com.antifake.model.User;
-import com.antifake.model.UserKey;
+import com.antifake.model.PubKey;
 import com.antifake.service.UserService;
 import com.antifake.utils.ECCUtil;
 import com.antifake.utils.ECCUtilsBak;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
 	private UserMapper userMapper;
 	
 	@Autowired
-	private UserKeyMapper userKeyMapper;
+	private PubKeyMapper userKeyMapper;
 	
 	@Autowired
 	private PrivateKeyMapper privateKeyMapper;
@@ -43,7 +44,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String registUser(User user) throws Exception {
+	public Map<String,Object> registUser(User user) throws Exception {
+		Map<String,Object> resultMap = new HashMap<String,Object>();
 		String userId = UUID.randomUUID().toString().replace("-", "");
 		user.setUserId(userId);
 		user.setPassword(MD5Utils.hash(user.getPassword()));
@@ -52,18 +54,19 @@ public class UserServiceImpl implements UserService {
 		KeyPair keyPair = ECCUtil.getKeyPair();  
         String publicKeyStr = ECCUtil.getPublicKey(keyPair);  
         String privateKeyStr = ECCUtil.getPrivateKey(keyPair);
-		UserKey userKey = new UserKey();
+		PubKey userKey = new PubKey();
 		userKey.setUserId(userId);
 		userKey.setPublicKey(privateKeyStr);
 		//保存公钥
 		userKeyMapper.insertUserKey(userKey);
 		
+		
+		user.setPassword(null);
+		resultMap.put("privateKey", publicKeyStr);
+		resultMap.put("user", user);
+		
 		//保存私钥（test）
-		PrivateKey privateKeyModel = new PrivateKey();
-		privateKeyModel.setPrivateKey(publicKeyStr);
-		privateKeyModel.setUserId(userId);
-		privateKeyMapper.insertPrivateKey(privateKeyModel);
-		return publicKeyStr;
+		return resultMap;
 	}
 
 	@Override
@@ -101,7 +104,7 @@ public class UserServiceImpl implements UserService {
 			Map<String, String> initKey = ECCUtilsBak.initKey();
 			//获取公钥
 			String publicKey = ECCUtilsBak.getPublicKey(initKey);
-			UserKey userKey = new UserKey();
+			PubKey userKey = new PubKey();
 			userKey.setUserId(userId);
 			userKey.setPublicKey(publicKey);
 			//保存公钥

@@ -12,18 +12,18 @@
     product_id, company_id,company_code,product_code, template
   </sql>
   <insert id="createProduct" parameterType="com.antifake.model.Product" >
-    insert into antifake_product (company_id,company_code,product_code,template
+    insert into company_product (company_id,company_code,product_code,template
       )
     values (#{companyId,jdbcType=INTEGER},#{companyCode,jdbcType=VARCHAR},#{productCode,jdbcType=VARCHAR}, #{template,jdbcType=VARCHAR}
       )
   </insert>
   <select id="queryByCCode" resultMap="BaseResultMap">
-  	select company_id from antifake_product where company_code = #{companyCode}
+  	select company_id from company_product where company_code = #{companyCode}
   </select>
   <select id="queryByProductId" resultMap="BaseResultMap">
-  	select <include refid="Base_Column_List"></include> from antifake_product where product_id = #{productId}
+  	select <include refid="Base_Column_List"></include> from company_product where product_id = #{productId}
   </select>
   <select id="queryByCId" resultMap="BaseResultMap">
-  	select <include refid="Base_Column_List"></include> from antifake_product where company_id = #{companyId}
+  	select <include refid="Base_Column_List"></include> from company_product where company_id = #{companyId}
   </select>
 </mapper>

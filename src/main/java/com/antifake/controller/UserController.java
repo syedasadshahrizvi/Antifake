@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,12 +23,11 @@ import com.antifake.converter.UserInfoForm2UserModelConverter;
 import com.antifake.converter.UserRepetition2UserModelConverter;
 import com.antifake.enums.ResultEnum;
 import com.antifake.exception.AntiFakeException;
-import com.antifake.form.UserRegistForm;
 import com.antifake.form.UserInfoForm;
+import com.antifake.form.UserRegistForm;
 import com.antifake.form.UserRepetition;
 import com.antifake.model.User;
 import com.antifake.service.CodeService;
-import com.antifake.service.KeyService;
 import com.antifake.service.UserService;
 import com.antifake.utils.ResultVOUtil;
 import com.antifake.utils.UUIDUtil;
@@ -63,8 +61,7 @@ public class UserController {
 	 * @date 2018年4月10日
 	 */
 	@PostMapping("/regist")
-	public ResultVO registUser(@Valid UserRegistForm userForm, BindingResult bindingResult) throws Exception {
-
+	public ResultVO<Map<String,Object>> registUser(@Valid UserRegistForm userForm, BindingResult bindingResult) throws Exception {
 		if (bindingResult.hasErrors()) {
 			log.error("【用户注册】参数不正确,UserForm={}", userForm);
 			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(),
@@ -81,8 +78,8 @@ public class UserController {
 					ResultEnum.USERNAME_IS_EXIST.getMessage());
 		}
 
-		String privateKey = userService.registUser(userconvert);
-		return ResultVOUtil.success(privateKey);
+		Map<String, Object> resultMap = userService.registUser(userconvert);
+		return ResultVOUtil.success(resultMap);
 	}
 
 	/**

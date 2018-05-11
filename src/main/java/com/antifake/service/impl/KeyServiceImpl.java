@@ -5,8 +5,8 @@ import java.security.KeyPair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.antifake.mapper.UserKeyMapper;
-import com.antifake.model.UserKey;
+import com.antifake.mapper.PubKeyMapper;
+import com.antifake.model.PubKey;
 import com.antifake.service.KeyService;
 import com.antifake.utils.ECCUtil;
 
@@ -14,7 +14,7 @@ import com.antifake.utils.ECCUtil;
 public class KeyServiceImpl implements KeyService{
 	
 	@Autowired
-	private UserKeyMapper userKeyMapper;
+	private PubKeyMapper userKeyMapper;
 
 	@Override
 	public String createKey(String userId) throws Exception {
@@ -22,7 +22,7 @@ public class KeyServiceImpl implements KeyService{
 		String privateKey = ECCUtil.getPrivateKey(keyPair);
 		String publicKey = ECCUtil.getPublicKey(keyPair);
 		
-		UserKey userKey = new UserKey();
+		PubKey userKey = new PubKey();
 		userKey.setUserId(userId);
 		userKey.setPublicKey(privateKey);
 		

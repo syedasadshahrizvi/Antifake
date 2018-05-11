@@ -37,7 +37,9 @@ public class CodeController {
 			throw new AntiFakeException(ResultEnum.TELPHONE_ERROR.getCode(), ResultEnum.TELPHONE_ERROR.getMessage());
 		}
 		String flag = codeService.sendCode(telphone);
-		return ResultVOUtil.success(flag);
+		if("success".equals(flag))
+			return ResultVOUtil.success(flag);
+		return ResultVOUtil.error(ResultEnum.TEL_CODE_ERROR.getCode(), ResultEnum.TEL_CODE_ERROR.getMessage());
 	}
 	
 	/**

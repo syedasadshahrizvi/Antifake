@@ -1,5 +1,7 @@
 package com.antifake.service;
 
+import java.util.Map;
+
 import com.antifake.VO.UserVO;
 import com.antifake.model.User;
 
@@ -19,7 +21,7 @@ public interface UserService {
 	 * @author JZR  
 	 * @date 2018年4月10日 
 	 */
-	String registUser(User userconvert) throws Exception;
+	Map<String,Object> registUser(User userconvert) throws Exception;
 
 	/**
 	 * <p>Description: 用户名或手机号登陆</p>

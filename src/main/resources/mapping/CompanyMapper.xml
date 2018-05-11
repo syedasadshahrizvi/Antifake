@@ -17,21 +17,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from antifake_company
+    from company_company
     where company_id = #{companyId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from antifake_company
+    delete from company_company
     where company_id = #{companyId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.antifake.model.Company" >
-    insert into antifake_company (company_id,user_id,company_name, register_id, level, 
+    insert into company_company (company_id,user_id,company_name, register_id, level, 
       status, business_license)
     values (#{companyId,jdbcType=INTEGER},#{userId,jdbcType=VARCHAR},#{companyName,jdbcType=VARCHAR}, #{registerId,jdbcType=VARCHAR}, #{level,jdbcType=TINYINT}, 
       #{status,jdbcType=TINYINT}, #{businessLicense,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.antifake.model.Company" useGeneratedKeys="true" keyProperty="companyId" keyColumn="company_id">
-    insert into antifake_company
+    insert into company_company
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="companyId != null" >
         company_id,
@@ -86,7 +86,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.antifake.model.Company" >
-    update antifake_company
+    update company_company
     <set >
       <if test="userId != null" >
         user_id = #{userId,jdbcType=VARCHAR},
@@ -110,7 +110,7 @@
     where company_id = #{companyId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.antifake.model.Company" >
-    update antifake_company
+    update company_company
     set user_id = #{userId,jdbcType=VARCHAR},
       company_name = #{companyName,jdbcType=VARCHAR},
       register_id = #{registerId,jdbcType=VARCHAR},
@@ -120,24 +120,24 @@
     where company_id = #{companyId,jdbcType=INTEGER}
   </update>
   <select id="selectByRegisterId" resultType="integer" parameterType="com.antifake.model.Company">
-  	select count(company_id) from antifake_company where register_id = #{registerId,jdbcType=VARCHAR}
+  	select count(company_id) from company_company where register_id = #{registerId,jdbcType=VARCHAR}
   </select>
   <select id="selectCompanyByRegisterId" resultMap="BaseResultMap" parameterType="java.lang.String">
 	  	 select 
 	    <include refid="Base_Column_List" />
-	    from antifake_company
+	    from company_company
 	    where company_id = #{registerId,jdbcType=VARCHAR}
   </select>
   <select id="selectByUserId" resultMap="BaseResultMap">
   	select 
     <include refid="Base_Column_List" />
-    from antifake_company
+    from company_company
     where user_id = #{userId,jdbcType=VARCHAR}
   </select>
   <select id="selectList">
   	select 
     <include refid="Base_Column_List" />
-    from antifake_company
+    from company_company
     <where>
     	<if test="status != null">
     		status = #{status}
