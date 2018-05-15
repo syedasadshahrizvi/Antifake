@@ -9,7 +9,7 @@ public class UserInfoForm2UserModelConverter {
 		
 		User user = new User();
 		
-		user.setUsername(userInfoForm.getUsername());
+		user.setUserId(userInfoForm.getUserId());
 		user.setNickname(userInfoForm.getNickname());
 		
 		return user;

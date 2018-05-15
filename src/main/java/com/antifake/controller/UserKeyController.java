@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/key")
 @Slf4j
-public class UserKeyCroller {
+public class UserKeyController {
 	
 	@Autowired
 	private CodeService codeService;
@@ -41,7 +41,7 @@ public class UserKeyCroller {
 		if (!codeService.checkCode(telphone, code))
 			return ResultVOUtil.success(ResultEnum.CODE_ERROR.getCode(), ResultEnum.CODE_ERROR.getMessage());
 		String privateKey = keyService.createKey(userId);
-		log.info("【密钥】生成密钥,{userId}=",userId);
+		log.info("【密钥】生成密钥,userId={}",userId);
 		return ResultVOUtil.success(privateKey);
 	}
 }

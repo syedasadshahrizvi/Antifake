@@ -42,7 +42,7 @@
     from antifake_cipher
     where company_code = #{cipher.companyCode,jdbcType=VARCHAR} and product_code = #{cipher.productCode,jdbcType=VARCHAR} and code = #{cipher.code,jdbcType=VARCHAR}
   </select>
-  <update id="cipher" parameterType="com.antifake.model.Cipher">
+  <update id="updateCount" parameterType="com.antifake.model.Cipher">
   	update antifake_cipher set count = #{cipher.count,jdbcType=VARCHAR} where company_code = #{cipher.companyCode,jdbcType=VARCHAR} and product_code = #{cipher.productCode,jdbcType=VARCHAR} and code = #{cipher.code,jdbcType=VARCHAR}
   </update>
 </mapper>

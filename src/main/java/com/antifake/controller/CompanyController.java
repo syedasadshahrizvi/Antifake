@@ -42,7 +42,7 @@ public class CompanyController {
 	 * @date 2018年4月12日 
 	 */
 	@PostMapping("/add")
-	@LoginRequired(checkRole=true,role="company")
+	@LoginRequired
 	public ResultVO<Map<String,Object>> applyCompany(@Valid CompanyForm companyForm, BindingResult bindingResult){
 		
 		if(bindingResult.hasErrors()) {

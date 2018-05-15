@@ -9,7 +9,7 @@ import lombok.Data;
 public class UserRegistForm {
 	
 	/**	账户.	*/
-	@Pattern(regexp="^[a-zA-Z][a-zA-Z0-9_]{4,15}$",message="用户名必须为3到18位的字母或数字")
+	@Pattern(regexp="^[a-zA-Z][a-zA-Z0-9_]{3,15}$",message="用户名必须为4到18位的字母或数字")
 	private String username;
 	
 	/** 密码.	*/

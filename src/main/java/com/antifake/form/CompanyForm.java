@@ -1,7 +1,6 @@
 package com.antifake.form;
 
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
@@ -9,7 +8,7 @@ import lombok.Data;
 @Data
 public class CompanyForm {
 	
-	@NotBlank(message="公司id不能为空")
+	//@NotBlank(message="公司id不能为空")
 	private Integer companyId;
 	
 	@NotEmpty(message="公司名不能为空")

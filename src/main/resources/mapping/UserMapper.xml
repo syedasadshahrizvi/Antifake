@@ -17,6 +17,11 @@
     	<result column="uId" property="UserId"/>
     	<result column="pKey" property="publicKey"/>
     </collection>
+    <collection property="roleList" ofType="com.antifake.model.Role" column="roleId">
+    	<id column="roleId" property="roleId"/>
+    	<result column="roleName" property="roleName"/>
+    	<result column="description" property="description"/>
+    </collection>
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, username, password, nickname, telphone, id_card, realname, sex, real_status, 
@@ -157,13 +162,26 @@
   </update>
   
   <select id="queryUserByUsernameOrTelphone" parameterType="com.antifake.model.User" resultMap="BaseResultMap">
-  	select user_id,username,telphone,nickname,password,status from account_user 
+	  	SELECT
+		u.user_id,
+		u.username,
+		u.telphone,
+		u.nickname,
+		u. PASSWORD,
+		u. STATUS,
+		r.role_id as roleId,
+		r.role_name as roleName,
+		r.description as description
+		FROM
+			account_user u
+		LEFT JOIN account_user_role ur ON u.user_id = ur.user_id
+		LEFT JOIN account_role r ON ur.role_id = r.role_id
   	<where>
   		<if test="user.username != null">
-  			or username = #{user.username}
+  			or u.username = #{user.username}
   		</if>
   		<if test="user.telphone != null">
-  			or telphone = #{user.telphone}
+  			or u.telphone = #{user.telphone}
   		</if>
   	</where>
   </select>

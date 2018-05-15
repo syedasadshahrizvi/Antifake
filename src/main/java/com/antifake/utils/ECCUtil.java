@@ -82,15 +82,19 @@ public class ECCUtil {
         String publicKeyStr = ECCUtil.getPublicKey(keyPair);  
         String privateKeyStr = ECCUtil.getPrivateKey(keyPair);  
         System.out.println("ECC公钥Base64编码:" + publicKeyStr);  
-        System.out.println("ECC私钥Base64编码:" + privateKeyStr);  
+        System.out.println("ECC私钥Base64编码:" + privateKeyStr); 
+        
+        String pk = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEuak4z58RQDklJ9SlBHHOuzMe+B4v+QU1Zl6DVWnsm8R0wJ3Jo6ndzRJGsqVAt1HYjmONt2lx0g8SCRkuFFb6hA==";
+        String vk =	"MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgkmQI+SZ3hCqlaV1c3/0rG5qQ7N5nMGN6+fbSqxapxv+gCgYIKoZIzj0DAQehRANCAAS5qTjPnxFAOSUn1KUEcc67Mx74Hi/5BTVmXoNVaeybxHTAncmjqd3NEkaypUC3UdiOY423aXHSDxIJGS4UVvqE";
           
         ECPublicKey publicKey = string2PublicKey(publicKeyStr);  
         ECPrivateKey privateKey = string2PrivateKey(privateKeyStr);  
           
         byte[] publicEncrypt = publicEncrypt("Hello World!".getBytes(), publicKey);  
-        String encodeToString = Base64Utils.encodeToString(publicEncrypt);
-        System.out.println(encodeToString);
-        byte[] privateDecrypt = privateDecrypt(publicEncrypt, privateKey);  
+        String encodeToString2 = Base64Utils.encodeToString(publicEncrypt);
+        System.out.println(encodeToString2);
+        byte[] decodeFromString = Base64Utils.decodeFromString(encodeToString2);
+        byte[] privateDecrypt = privateDecrypt(decodeFromString, privateKey);  
         System.out.println(new String(privateDecrypt));  
     }  
 }  

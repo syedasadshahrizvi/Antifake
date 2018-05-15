@@ -85,13 +85,15 @@ public class UserServiceImpl implements UserService {
 			userVO.setTelphone(user.getTelphone());
 			userVO.setUsername(user.getUsername());
 			userVO.setStatus(user.getStatus());
+			userVO.setRoleList(user.getRoleList());
 		}
 
 		return userVO;
 	}
 
 	@Override
-	public UserVO findByTelphone(String telphone) {
+	public Map<String,Object> findByTelphone(String telphone) {
+		Map<String,Object> resultMap = new HashMap<String,Object>();
 		User user = new User();
 		user.setTelphone(telphone);
 		User userResult = userMapper.queryUserByUsernameOrTelphone(user);
@@ -113,33 +115,28 @@ public class UserServiceImpl implements UserService {
 			String privateKey = ECCUtilsBak.getPrivateKey(initKey);
 			userVO.setUserId(userId);
 			userVO.setTelphone(telphone);
-			userVO.setPrivateKey(privateKey);
+			userVO.setStatus(1);
+			//userVO.setPrivateKey(privateKey);
+			PrivateKey privateKeyModel = new PrivateKey();
+			privateKeyModel.setUserId(userId);
+			privateKeyModel.setPrivateKey(privateKey);
+			resultMap.put("privateKey", privateKeyModel);
 		}else {
 			userVO.setUserId(userResult.getUserId());
 			userVO.setNickname(userResult.getNickname());
 			userVO.setTelphone(userResult.getTelphone());
 			userVO.setUsername(userResult.getUsername());
 			userVO.setStatus(userResult.getStatus());
+			userVO.setRoleList(userResult.getRoleList());
 		}
-		return userVO;
+		resultMap.put("userVO", userVO);
+		return resultMap;
 	}
 
 	@Override
-	public UserVO updateByUsernameOrTelphone(User userconvert) {
-		// 正则匹配手机号
-		UserVO userVO = new UserVO();
-		userVO.setUsername(userconvert.getUsername());
-		userVO.setNickname(userconvert.getNickname());
-		if (RegExUtils.isPhone(userconvert.getUsername())) {
-			userconvert.setTelphone(userconvert.getUsername());
-			userVO.setTelphone(userconvert.getUsername());
-			userconvert.setUsername(null);
-			userVO.setUsername(null);
-		}
-		User user = userMapper.queryUserByUsernameOrTelphone(userconvert);
-		userconvert.setUserId(user.getUserId());
-		userMapper.updateByPrimaryKeySelective(userconvert);
-		return userVO;
+	public Integer updateByUsernameOrTelphone(User userconvert) {
+		Integer update = userMapper.updateByPrimaryKeySelective(userconvert);
+		return update;
 	}
 
 	@Override

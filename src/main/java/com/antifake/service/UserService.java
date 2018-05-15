@@ -35,14 +35,14 @@ public interface UserService {
 	 * @author JZR  
 	 * @date 2018年4月11日 
 	 */
-	UserVO findByTelphone(String telphone);
+	Map<String,Object> findByTelphone(String telphone);
 
 	/**
 	 * <p>Description: 根据账户或手机号修改用户信息</p>
 	 * @author JZR  
 	 * @date 2018年4月11日 
 	 */
-	UserVO updateByUsernameOrTelphone(User userconvert);
+	Integer updateByUsernameOrTelphone(User userconvert);
 
 	/**
 	 * <p>Description: 修改密码（根据密码）</p>

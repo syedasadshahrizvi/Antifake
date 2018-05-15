@@ -14,7 +14,7 @@
   </sql>
   
   <insert id="insertExpre" parameterType="com.antifake.model.Expre" >
-    insert into antifake_check
+    insert into antifake_expre
 		(company_id,product_expre,batch)  
 		values    
 		(  
@@ -26,7 +26,7 @@
    <select id="queryExpreByCId" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
-    from antifake_check
+    from antifake_expre
     where company_id = #{companyId} and batch = #{batch}
   </select>
 </mapper>

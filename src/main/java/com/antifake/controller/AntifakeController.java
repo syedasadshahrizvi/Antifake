@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,7 +42,7 @@ public class AntifakeController {
 	  * @date 2018年5月7日
 	  */
 	@GetMapping("/checked/{codeString}/{type}")
-	public ResultVO<Map<String,Object>> checkCipher(@RequestParam("codeString")String codeString,@RequestParam(name="type",required = false)String type) throws Exception {
+	public ResultVO<Map<String,Object>> checkCipher(@PathVariable("codeString")String codeString,@PathVariable(name="type")String type) throws Exception {
 		Map<String,Object> resultMap = antifakeService.checkCode(codeString,type);
 		return ResultVOUtil.success(resultMap);
 	}

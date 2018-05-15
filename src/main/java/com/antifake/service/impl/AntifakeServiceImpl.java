@@ -122,7 +122,7 @@ public class AntifakeServiceImpl implements AntifakeService{
 		Expre resultCheck = expreMapper.queryExpreByCId(resultCipher.getCompanyId(),resultCipher.getBatch());
 		//校验
 		//查询公钥
-		Company company = companyMapper.selectByPrimaryKey(cipher.getCompanyId());
+		Company company = companyMapper.selectByPrimaryKey(resultCipher.getCompanyId());
 		List<PubKey> userKeyList = userKeyMapper.selectKeyByUid(company.getUserId());
 		String publicKey = userKeyList.get(0).getPublicKey();
 		//String[] splitCheck = StringUtils.split(resultCheck.getCount(), ".");
@@ -136,7 +136,7 @@ public class AntifakeServiceImpl implements AntifakeService{
 		String decryptString = new String(decrypt);
 		String cipherMd5 = StringUtils.split(decryptString, ".")[0];
 		if(MD5Utils.hash(resultCheck.getProductExpre()).equals(cipherMd5)) {
-			resultMap.put("decrypt", decryptString);
+			resultMap.put("decrypt", resultCheck.getProductExpre());
 			//次数解密
 			String count = resultCipher.getCount();
 			if(requestType.equals(type)) {

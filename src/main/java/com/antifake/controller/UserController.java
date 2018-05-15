@@ -158,12 +158,12 @@ public class UserController {
 	 * @date 2018年4月10日
 	 */
 	@PostMapping("/codelogin")
-	public ResultVO<UserVO> codeLogin(@RequestParam(required = true) String telphone,
+	public ResultVO<Map<String,Object>> codeLogin(@RequestParam(required = true) String telphone,
 			@RequestParam(required = true) String code, @RequestParam(name = "app", defaultValue = "false") Boolean app,
 			HttpServletRequest request, HttpServletResponse response) {
 		if (!codeService.checkCode(telphone, code))
 			return ResultVOUtil.success(ResultEnum.CODE_ERROR.getCode(), ResultEnum.CODE_ERROR.getMessage());
-		UserVO userVO = userService.findByTelphone(telphone);
+		Map<String, Object> findByTelphone = userService.findByTelphone(telphone);
 		// 添加token
 		String get32uuid = UUIDUtil.get32UUID();
 		if (app) {
@@ -174,8 +174,9 @@ public class UserController {
 			cookie.setPath("/");
 			response.addCookie(cookie);
 		}
+		UserVO userVO = (UserVO)findByTelphone.get("userVO");
 		redisTemplate.opsForValue().set(get32uuid, userVO.getUserId(), 30, TimeUnit.DAYS);
-		return ResultVOUtil.success(userVO);
+		return ResultVOUtil.success(findByTelphone);
 	}
 
 	/**
@@ -186,14 +187,14 @@ public class UserController {
 	 * @author JZR
 	 * @date 2018年4月11日
 	 */
-	@PostMapping("/editinfo")
-	public ResultVO<UserVO> editUser(@Valid UserInfoForm userInfoForm, BindingResult bindingResult) {
+	@PostMapping("/chinfo")
+	public ResultVO<Integer> editUser(@Valid UserInfoForm userInfoForm, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			log.error("【用户资料编辑】参数格式不正确，userInfoForm = {}", userInfoForm);
-			throw new AntiFakeException(ResultEnum.PARAM_ERROR);
+			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(),bindingResult.getFieldError().getDefaultMessage());
 		}
 		User userconvert = UserInfoForm2UserModelConverter.convert(userInfoForm);
-		UserVO userResult = userService.updateByUsernameOrTelphone(userconvert);
+		Integer userResult = userService.updateByUsernameOrTelphone(userconvert);
 
 		return ResultVOUtil.success(userResult);
 	}
@@ -206,7 +207,7 @@ public class UserController {
 	 * @author JZR
 	 * @date 2018年4月11日
 	 */
-	@PostMapping("/editpwd")
+	@PostMapping("/chpwd")
 	public ResultVO editPassword(@RequestParam(required = true) String userId,
 			@RequestParam(required = true) String oldpwd, @RequestParam(required = true) String newpwd) {
 		Boolean flag = userService.updatePwdByPwd(userId, oldpwd, newpwd);
@@ -224,7 +225,7 @@ public class UserController {
 	 * @author JZR
 	 * @date 2018年4月11日
 	 */
-	@PostMapping("/editpwd2")
+	@PostMapping("/chpwdbycode")
 	public ResultVO editPwdBycode(String userId, String telphone, String code, String newpwd) {
 		// 判断验证码
 		if (!codeService.checkCode(telphone, code))

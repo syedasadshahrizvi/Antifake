@@ -1,5 +1,9 @@
 package com.antifake.VO;
 
+import java.util.List;
+
+import com.antifake.model.Role;
+
 import lombok.Data;
 
 @Data
@@ -12,7 +16,7 @@ public class UserVO {
 	private String username;
 	
 	/**	用户身份状态	*/
-	private Byte status;
+	private Integer status;
 	
 	/**	手机号	*/
 	private String telphone;
@@ -24,6 +28,9 @@ public class UserVO {
 	private Byte realStatus;
 	
 	/**	私钥	*/
-	private String privateKey;
+	//private String privateKey;
+	
+	/**	角色	*/
+	private List<Role> roleList;
 
 }

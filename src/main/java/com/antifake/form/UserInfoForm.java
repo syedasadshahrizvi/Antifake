@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 public class UserInfoForm {
 	
-	@NotEmpty
-	private String username;
+	@NotEmpty(message="用戶id不能为空")
+	private String userId;
 	
-	@NotEmpty
+	@NotEmpty(message="昵称不能为空")
 	private String nickname;
 }
