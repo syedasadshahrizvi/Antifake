@@ -2,6 +2,9 @@ package com.antifake.exception;
 
 import com.antifake.enums.ResultEnum;
 
+import lombok.Data;
+
+@Data
 public class AntiFakeException extends RuntimeException{
 	
 	 private Integer code;
