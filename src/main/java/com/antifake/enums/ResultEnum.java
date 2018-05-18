@@ -20,7 +20,7 @@ public enum ResultEnum {
 	LOGIN_NULL(11,"用户尚未登陆！"),
 	AUTHO_ERROR(12,"没有权限访问！"),
 	TEL_CODE_ERROR(13,"验证码发送失败，请稍后再试！"),
-	ADDRESSID_ERROR(14,"地址Id不能为空！"),
+	ID_ERROR(14,"Id不能为空！"),
 	F0F(404,"找不到页面！");
 	
 	private Integer code;

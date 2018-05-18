@@ -46,5 +46,7 @@ public class AntifakeController {
 		Map<String,Object> resultMap = antifakeService.checkCode(codeString,type);
 		return ResultVOUtil.success(resultMap);
 	}
+	
+	 
 
 }

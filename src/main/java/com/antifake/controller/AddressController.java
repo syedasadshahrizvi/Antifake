@@ -60,7 +60,7 @@ public class AddressController {
 	public ResultVO edit(@Valid AddressForm addressForm ,BindingResult bindingResult) {
 		if(bindingResult.hasErrors() || addressForm.getAddressId()==null) {
 			log.error("【编辑地址】参数不正确，addressForm={}", addressForm);
-			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(), bindingResult.getFieldError().getDefaultMessage()==null?ResultEnum.ADDRESSID_ERROR.getMessage():bindingResult.getFieldError().getDefaultMessage());
+			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(), addressForm.getAddressId()==null?ResultEnum.ID_ERROR.getMessage():bindingResult.getFieldError().getDefaultMessage());
 		}
 		Address address = AddressForm2AddressModel.converte(addressForm);
 		addressService.updateAddress(address);
