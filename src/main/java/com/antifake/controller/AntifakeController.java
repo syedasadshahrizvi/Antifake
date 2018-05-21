@@ -47,6 +47,6 @@ public class AntifakeController {
 		return ResultVOUtil.success(resultMap);
 	}
 	
-	 
-
+	//统计防伪信息
+	
 }

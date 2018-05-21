@@ -18,9 +18,11 @@ public enum ResultEnum {
 	IMG_TYPE_ERROR(9,"图片类型不正确！"),
 	COMPANY_ERROR(10,"公司尚未审核通过！"),
 	LOGIN_NULL(11,"用户尚未登陆！"),
-	AUTHO_ERROR(12,"没有权限访问！"),
 	TEL_CODE_ERROR(13,"验证码发送失败，请稍后再试！"),
 	ID_ERROR(14,"Id不能为空！"),
+	USER_NOT_EXIST(15,"用户不存在！"),
+	PUB_KEY_NOT_EXIST(16,"公钥不存在！!"),
+	AUTHO_ERROR(401,"没有权限访问！"),
 	F0F(404,"找不到页面！");
 	
 	private Integer code;
