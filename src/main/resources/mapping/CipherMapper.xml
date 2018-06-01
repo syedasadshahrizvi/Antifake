@@ -23,7 +23,7 @@
   
   <insert id="insertList" parameterType="java.util.ArrayList" >
     insert into antifake_cipher
-		(company_id,company_code,product_code,cipher_text,code,batch)  
+		(company_id,company_code,product_code,cipher_text,code,batch,valid)  
 		values   
 		<foreach item="cipher" collection="listCipher"  separator="," >  
 		(  
@@ -32,7 +32,8 @@
 		#{cipher.productCode,jdbcType=VARCHAR},
 		#{cipher.cipherText,jdbcType=VARCHAR},
 		#{cipher.code,jdbcType=VARCHAR},
-		#{cipher.batch,jdbcType=VARCHAR}
+		#{cipher.batch,jdbcType=VARCHAR},
+		#{cipher.valid,jdbcType=VARCHAR}
 		)  
 		</foreach> 
   </insert>
@@ -45,4 +46,42 @@
   <update id="updateCount" parameterType="com.antifake.model.Cipher">
   	update antifake_cipher set count = #{cipher.count,jdbcType=VARCHAR} where company_code = #{cipher.companyCode,jdbcType=VARCHAR} and product_code = #{cipher.productCode,jdbcType=VARCHAR} and code = #{cipher.code,jdbcType=VARCHAR}
   </update>
+  <update id="updateValid" parameterType="com.antifake.model.Cipher">
+  	update antifake_cipher set valid = #{cipher.valid,jdbcType=VARCHAR} where cipher_id = #{cipher.cipherId,jdbcType=INTEGER} and company_id = #{cipher.companyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateButchValid">
+  	update antifake_cipher set valid = #{cipher.valid,jdbcType=VARCHAR} where company_id = #{cipher.companyId,jdbcType=INTEGER} and batch = #{cipher.batch,jdbcType=VARCHAR}
+  </update>
+  <update id="updateValidByCode">
+  	update antifake_cipher set valid = #{valid,jdbcType=VARCHAR} where company_id = #{companyId,jdbcType=INTEGER} and code between #{begin} and #{end}
+  </update>
+  <select id="listCipher">
+  	select 
+    <include refid="Base_Column_List" />
+    from antifake_cipher
+    <where>
+    	<if test="companyId != null">
+    		and company_id = #{companyId}
+    	</if>
+    	<if test="companyCode != null">
+    		and company_code = #{companyCode}
+    	</if>
+    	<if test="productCode != null ">
+    		and product_code = #{productCode}
+    	</if>
+    	<if test="batch != null">
+    		and batch = #{batch}
+    	</if>
+    </where>
+    order by #{orderBy} desc 
+    limit #{pageNum}, #{pageSize}
+  </select>
+  
+  <select id="getCount">
+  	select count(cipher_id) from antifake_cipher where batch = #{batch}
+  </select>
+  <select id="getUseCount">
+  	select count(cipher_id) from antifake_cipher where batch = #{batch} and count != 0
+  </select>
+  
 </mapper>

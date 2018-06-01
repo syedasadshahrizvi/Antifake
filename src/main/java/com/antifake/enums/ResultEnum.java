@@ -21,7 +21,10 @@ public enum ResultEnum {
 	TEL_CODE_ERROR(13,"验证码发送失败，请稍后再试！"),
 	ID_ERROR(14,"Id不能为空！"),
 	USER_NOT_EXIST(15,"用户不存在！"),
-	PUB_KEY_NOT_EXIST(16,"公钥不存在！!"),
+	PUB_KEY_NOT_EXIST(16,"公钥不存在！"),
+	DECRYPT_ERROR(17,"解密失败，该产品为假冒产品！"),
+	CIPHER_DOWN(18,"该防伪码为作废码！"),
+	CIPHER_BACK(19,"该防伪码为已召回码！"),
 	AUTHO_ERROR(401,"没有权限访问！"),
 	F0F(404,"找不到页面！");
 	

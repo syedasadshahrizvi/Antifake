@@ -63,7 +63,7 @@ public class UserKeyController {
 	}
 	
 	/**
-	  * <p>Description: </p>
+	  * <p>Description: 根据公钥查询用户</p>
 	  * @author JZR  
 	  * @date 2018年5月21日
 	  */

@@ -29,4 +29,10 @@
     from antifake_expre
     where company_id = #{companyId} and batch = #{batch}
   </select>
+  <select id="queryExpreByCoId" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from antifake_expre
+    where company_id = #{companyId} limit #{pageNum} , #{pageSize}
+  </select>
 </mapper>

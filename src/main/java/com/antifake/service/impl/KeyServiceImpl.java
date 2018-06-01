@@ -27,9 +27,6 @@ public class KeyServiceImpl implements KeyService{
 	public static final Integer DEL_STATUS = 0;
 	
 	@Autowired
-	private PubKeyMapper userKeyMapper;
-	
-	@Autowired
 	private PubKeyRepository pubKeyRepository;
 	
 	@Autowired
@@ -41,11 +38,11 @@ public class KeyServiceImpl implements KeyService{
 		String privateKey = ECCUtil.getPrivateKey(keyPair);
 		String publicKey = ECCUtil.getPublicKey(keyPair);
 		
-		PubKey userKey = new PubKey();
-		userKey.setUserId(userId);
-		userKey.setPublicKey(privateKey);
+		PubKey pubKey = new PubKey();
+		pubKey.setUserId(userId);
+		pubKey.setPublicKey(privateKey);
 		
-		userKeyMapper.insertUserKey(userKey);
+		pubKeyRepository.save(pubKey);
 		
 		return publicKey;
 	}

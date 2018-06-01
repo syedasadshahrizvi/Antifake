@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.antifake.VO.UserVO;
 import com.antifake.mapper.PrivateKeyMapper;
 import com.antifake.mapper.PubKeyMapper;
+import com.antifake.mapper.PubKeyRepository;
 import com.antifake.mapper.UserMapper;
 import com.antifake.model.PrivateKey;
 import com.antifake.model.User;
@@ -28,10 +29,7 @@ public class UserServiceImpl implements UserService {
 	private UserMapper userMapper;
 	
 	@Autowired
-	private PubKeyMapper userKeyMapper;
-	
-	@Autowired
-	private PrivateKeyMapper privateKeyMapper;
+	private PubKeyRepository pubKeyRepository;
 
 	public User findById(String string) {
 		User user = userMapper.selectByPrimaryKey(string);
@@ -54,18 +52,16 @@ public class UserServiceImpl implements UserService {
 		KeyPair keyPair = ECCUtil.getKeyPair();  
         String publicKeyStr = ECCUtil.getPublicKey(keyPair);  
         String privateKeyStr = ECCUtil.getPrivateKey(keyPair);
-		PubKey userKey = new PubKey();
-		userKey.setUserId(userId);
-		userKey.setPublicKey(privateKeyStr);
+		PubKey pubKey = new PubKey();
+		pubKey.setUserId(userId);
+		pubKey.setPublicKey(privateKeyStr);
 		//保存公钥
-		userKeyMapper.insertUserKey(userKey);
-		
+		pubKeyRepository.save(pubKey);
 		
 		user.setPassword(null);
 		resultMap.put("privateKey", publicKeyStr);
 		resultMap.put("user", user);
 		
-		//保存私钥（test）
 		return resultMap;
 	}
 
@@ -106,11 +102,11 @@ public class UserServiceImpl implements UserService {
 			Map<String, String> initKey = ECCUtilsBak.initKey();
 			//获取公钥
 			String publicKey = ECCUtilsBak.getPublicKey(initKey);
-			PubKey userKey = new PubKey();
-			userKey.setUserId(userId);
-			userKey.setPublicKey(publicKey);
+			PubKey pubKey = new PubKey();
+			pubKey.setUserId(userId);
+			pubKey.setPublicKey(publicKey);
 			//保存公钥
-			userKeyMapper.insertUserKey(userKey);
+			pubKeyRepository.save(pubKey);
 			//获取私钥
 			String privateKey = ECCUtilsBak.getPrivateKey(initKey);
 			userVO.setUserId(userId);

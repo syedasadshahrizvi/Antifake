@@ -6,6 +6,6 @@ import com.antifake.model.PrivateKey;
 
 public interface PrivateKeyMapper {
 
-	Integer insertPrivateKey(@Param("privateKey")PrivateKey privateKeyModel);
+	//Integer insertPrivateKey(@Param("privateKey")PrivateKey privateKeyModel);
 
 }
