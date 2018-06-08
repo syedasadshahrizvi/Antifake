@@ -3,10 +3,12 @@ package com.antifake.VO;
 import java.util.List;
 
 import com.antifake.model.Role;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import lombok.Data;
 
 @Data
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class UserVO {
 	
 	/**	用户Id.	*/
@@ -26,9 +28,6 @@ public class UserVO {
 	
 	/**	是否实名制	*/
 	private Byte realStatus;
-	
-	/**	私钥	*/
-	//private String privateKey;
 	
 	/**	角色	*/
 	private List<Role> roleList;

@@ -25,6 +25,8 @@ public enum ResultEnum {
 	DECRYPT_ERROR(17,"解密失败，该产品为假冒产品！"),
 	CIPHER_DOWN(18,"该防伪码为作废码！"),
 	CIPHER_BACK(19,"该防伪码为已召回码！"),
+	CODEID_ERROR(20,"验证码ID不存在！"),
+	TELPHONE_LOGIN_ERROR(21,"该手机号尚未注册！"),
 	AUTHO_ERROR(401,"没有权限访问！"),
 	F0F(404,"找不到页面！");
 	

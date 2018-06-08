@@ -1,18 +1,24 @@
 package com.antifake.utils;
+import java.io.FileOutputStream;
+import java.math.BigInteger;
 import java.security.KeyFactory;  
 import java.security.KeyPair;  
 import java.security.KeyPairGenerator;  
 import java.security.PrivateKey;  
 import java.security.PublicKey;  
 import java.security.SecureRandom;  
-import java.security.Security;  
+import java.security.Security;
+import java.security.cert.X509Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;  
-import java.security.spec.X509EncodedKeySpec;  
-  
-import javax.crypto.Cipher;  
-  
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Calendar;
+
+import javax.crypto.Cipher;
+import javax.security.auth.x500.X500Principal;
+
 import org.bouncycastle.jce.interfaces.ECPrivateKey;  
 import org.bouncycastle.jce.interfaces.ECPublicKey;
+import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.springframework.util.Base64Utils;  
   
   
@@ -84,9 +90,37 @@ public class ECCUtil {
         System.out.println("ECC公钥Base64编码:" + publicKeyStr);  
         System.out.println("ECC私钥Base64编码:" + privateKeyStr); 
         
-        String pk = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEuak4z58RQDklJ9SlBHHOuzMe+B4v+QU1Zl6DVWnsm8R0wJ3Jo6ndzRJGsqVAt1HYjmONt2lx0g8SCRkuFFb6hA==";
-        String vk =	"MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgkmQI+SZ3hCqlaV1c3/0rG5qQ7N5nMGN6+fbSqxapxv+gCgYIKoZIzj0DAQehRANCAAS5qTjPnxFAOSUn1KUEcc67Mx74Hi/5BTVmXoNVaeybxHTAncmjqd3NEkaypUC3UdiOY423aXHSDxIJGS4UVvqE";
-          
+        X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
+        // 设置序列号  
+        certGen.setSerialNumber(new BigInteger("123"));  
+        // 设置颁发者  
+        certGen.setIssuerDN(new X500Principal("C=CN,ST=BJ,L=BJ,O=SICCA,OU=SC,CN=SICCA"));  
+        // 设置有效期  
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, - 7);
+        certGen.setNotBefore(c.getTime());  
+        c.add(Calendar.YEAR, 7);
+        certGen.setNotAfter(c.getTime());  
+        // 设置使用者  
+        certGen.setSubjectDN(new X500Principal("C=CN,ST=BJ,L=BJ,O=SICCA,OU=SC,CN=" + "JZR"));  
+        // 公钥  
+        certGen.setPublicKey(keyPair.getPublic());  
+        // 签名算法  
+        certGen.setSignatureAlgorithm("SHA1withECDSA");  
+        X509Certificate cert = certGen.generateX509Certificate(keyPair.getPrivate(), "BC");  
+        
+        String certPath = "d:/jzr.cer";  
+        
+        
+        FileOutputStream fos = new FileOutputStream(certPath);  
+        fos.write(cert.getEncoded());  
+        fos.close(); 
+        
+        ECPublicKey pk = (ECPublicKey)cert.getPublicKey(); 
+        byte[] encoded = pk.getEncoded();
+        String encodeToString = Base64Utils.encodeToString(encoded);
+        System.out.println("pk:"+encodeToString);  
+        
         ECPublicKey publicKey = string2PublicKey(publicKeyStr);  
         ECPrivateKey privateKey = string2PrivateKey(privateKeyStr);  
           

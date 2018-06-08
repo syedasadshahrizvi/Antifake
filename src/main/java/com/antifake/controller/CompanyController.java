@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,9 +44,10 @@ public class CompanyController {
 	 */
 	@PostMapping("/add")
 	@LoginRequired
-	public ResultVO<Map<String,Object>> applyCompany(@Valid CompanyForm companyForm, BindingResult bindingResult){
+	public ResultVO<Map<String,Object>> applyCompany(@Valid @RequestBody CompanyForm companyForm, BindingResult bindingResult){
 		
 		if(bindingResult.hasErrors()) {
+			log.error("【申请公司角色】请求参数有误, companyFore = {}", companyForm);
 			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(), bindingResult.getFieldError().getDefaultMessage());
 		}
 		
@@ -61,7 +63,7 @@ public class CompanyController {
 	 * @author JZR  
 	 * @date 2018年4月12日 
 	 */
-	@GetMapping("/listbyuid/{userId}")
+	@GetMapping("/list/{userId}")
 	public ResultVO<List<Company>> listByUserId(@PathVariable(name = "userId")String userId){
 		List<Company> companyList = companyService.selectCompanyByUserid(userId);
 		return ResultVOUtil.success(companyList);

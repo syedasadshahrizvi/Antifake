@@ -146,23 +146,24 @@ public class AntifakeServiceImpl implements AntifakeService {
 		byte[] cipherBytes = Base64Utils.decodeFromString(cipherText);
 		byte[] validByte = Base64Utils.decodeFromString(resultCipher.getValid());
 		byte[] decrypt = null;
+		String valid = null;
 		for (PubKey pubKey : userKeyList) {
 			try {
 				String publicKey = pubKey.getPublicKey();
 				ECPrivateKey privateKey = ECCUtil.string2PrivateKey(publicKey);
 				decrypt = ECCUtil.privateDecrypt(cipherBytes, privateKey);
-				byte[] valid = ECCUtil.privateDecrypt(validByte, privateKey);
-				if (decrypt == null || valid == null) {
-					throw new AntiFakeException(ResultEnum.DECRYPT_ERROR);
-				} else if (valid.equals(CipherStatus.DOWN.getCode())) {
-					throw new AntiFakeException(ResultEnum.CIPHER_DOWN);
-				} else if (valid.equals(CipherStatus.BACK.getCode())) {
-					throw new AntiFakeException(ResultEnum.CIPHER_BACK);
-				}
-
+				byte[] validByte2 = ECCUtil.privateDecrypt(validByte, privateKey);
+				valid = new String(validByte2);
 			} catch (Exception e) {
 				log.error("【解密操作】秘钥不匹配", e);
 			}
+		}
+		if (decrypt == null || valid == null) {
+			throw new AntiFakeException(ResultEnum.DECRYPT_ERROR);
+		} else if (valid.equals(CipherStatus.DOWN.getCode())) {
+			throw new AntiFakeException(ResultEnum.CIPHER_DOWN);
+		} else if (valid.equals(CipherStatus.BACK.getCode())) {
+			throw new AntiFakeException(ResultEnum.CIPHER_BACK);
 		}
 		String decryptString = new String(decrypt);
 		String cipherMd5 = StringUtils.split(decryptString, ".")[0];

@@ -31,11 +31,11 @@ public interface UserService {
 	UserVO loginByUsernameOrtelPhone(User userconvert);
 
 	/**
-	 * <p>Description: 根据手机号查询用户信息（如果用户不存在则新建用户）</p>
+	 * <p>Description: 根据手机号查询用户信息</p>
 	 * @author JZR  
 	 * @date 2018年4月11日 
 	 */
-	Map<String,Object> findByTelphone(String telphone);
+	UserVO findByTelphone(String telphone);
 
 	/**
 	 * <p>Description: 根据账户或手机号修改用户信息</p>

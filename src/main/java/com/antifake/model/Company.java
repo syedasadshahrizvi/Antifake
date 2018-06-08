@@ -1,6 +1,7 @@
 package com.antifake.model;
 
 public class Company {
+	
     private Integer companyId;
     
     private String userId;

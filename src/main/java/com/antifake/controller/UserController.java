@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +22,16 @@ import com.antifake.VO.UserVO;
 import com.antifake.converter.UserForm2UserModelConverter;
 import com.antifake.converter.UserInfoForm2UserModelConverter;
 import com.antifake.converter.UserRepetition2UserModelConverter;
+import com.antifake.enums.CodeEnum;
 import com.antifake.enums.ResultEnum;
 import com.antifake.exception.AntiFakeException;
+import com.antifake.form.UserChpwdByTelForm;
+import com.antifake.form.UserChpwdForm;
 import com.antifake.form.UserInfoForm;
+import com.antifake.form.UserLoginForm;
 import com.antifake.form.UserRegistForm;
 import com.antifake.form.UserRepetition;
+import com.antifake.form.UserTelphoneForm;
 import com.antifake.model.User;
 import com.antifake.service.CodeService;
 import com.antifake.service.UserService;
@@ -61,21 +67,29 @@ public class UserController {
 	 * @date 2018年4月10日
 	 */
 	@PostMapping("/regist")
-	public ResultVO<Map<String,Object>> registUser(@Valid UserRegistForm userForm, BindingResult bindingResult) throws Exception {
+	public ResultVO<Map<String,Object>> registUser(@Valid @RequestBody UserRegistForm userForm, BindingResult bindingResult,HttpServletRequest request) throws Exception {
 		if (bindingResult.hasErrors()) {
 			log.error("【用户注册】参数不正确,UserForm={}", userForm);
 			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(),
 					bindingResult.getFieldError().getDefaultMessage());
 		}
+		String codeId = request.getHeader(CodeEnum.CODE_ID.getCode());
+		if(codeId==null) {
+			log.error("【校验验证码】验证码ID不存在！");
+			throw new AntiFakeException(ResultEnum.CODEID_ERROR);
+		}
+		if(!codeService.checkImgCode(codeId,userForm.getImgCode())) {
+			return ResultVOUtil.success(ResultEnum.CODE_ERROR.getCode(), ResultEnum.CODE_ERROR.getMessage(),false);
+		}
 		Boolean checkCode = codeService.checkCode(userForm.getTelphone(), userForm.getCode());
 		if (!checkCode) {
-			return ResultVOUtil.success(ResultEnum.CODE_ERROR.getCode(), ResultEnum.CODE_ERROR.getMessage());
+			return ResultVOUtil.success(ResultEnum.CODE_ERROR.getCode(), ResultEnum.CODE_ERROR.getMessage(),false);
 		}
 		User userconvert = UserForm2UserModelConverter.convert(userForm);
 		User repetitionUser = userService.repetitionByUser(userconvert);
 		if (repetitionUser != null) {
 			return ResultVOUtil.success(ResultEnum.USERNAME_IS_EXIST.getCode(),
-					ResultEnum.USERNAME_IS_EXIST.getMessage());
+					ResultEnum.USERNAME_IS_EXIST.getMessage(),false);
 		}
 
 		Map<String, Object> resultMap = userService.registUser(userconvert);
@@ -91,7 +105,7 @@ public class UserController {
 	 * @date 2018年4月10日
 	 */
 	@PostMapping("/repetition")
-	public ResultVO repetition(@Valid UserRepetition userRepetition, BindingResult bindingResult) {
+	public ResultVO repetition(@Valid @RequestBody UserRepetition userRepetition, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			log.error("【用户信息重复判断】参数不正确,UserRepetition={}", userRepetition);
 			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(),
@@ -102,17 +116,16 @@ public class UserController {
 
 		if (userResult != null) {
 			if (userconvert.getUsername() != null) {
-				log.info("【用户信息重复判断】用户名重复，User={}", userconvert);
 				return ResultVOUtil.success(ResultEnum.USERNAME_IS_EXIST.getCode(),
-						ResultEnum.USERNAME_IS_EXIST.getMessage());
+						ResultEnum.USERNAME_IS_EXIST.getMessage(),false);
 			}
 			if (userconvert.getTelphone() != null) {
 				log.info("【用户信息重复判断】手机号已被占用，User={}", userconvert);
 				return ResultVOUtil.success(ResultEnum.TELPHONE_IS_EXIST.getCode(),
-						ResultEnum.TELPHONE_IS_EXIST.getMessage());
+						ResultEnum.TELPHONE_IS_EXIST.getMessage(),false);
 			}
 		}
-		return ResultVOUtil.success();
+		return ResultVOUtil.success(true);
 	}
 
 	/**
@@ -123,65 +136,57 @@ public class UserController {
 	 * @author JZR
 	 * @date 2018年4月10日
 	 */
-	@PostMapping("/pwdlogin")
-	public ResultVO<UserVO> pwdLogin(@RequestParam(required = true) String username,
-			@RequestParam(required = true) String password,
-			@RequestParam(name = "app", defaultValue = "false", required = false) Boolean app,
+	@PostMapping("/pwd/login")
+	public ResultVO<UserVO> pwdLogin(@RequestBody UserLoginForm userLoginForm,
 			HttpServletRequest request, HttpServletResponse response) {
 		User user = new User();
-		user.setUsername(username);
-		user.setPassword(password);
-		UserVO userResult = userService.loginByUsernameOrtelPhone(user);
+		user.setUsername(userLoginForm.getUsername());
+		user.setPassword(userLoginForm.getPassword());
+		UserVO userVO = userService.loginByUsernameOrtelPhone(user);
 		// 添加token
 		String get32uuid = UUIDUtil.get32UUID();
-		if (app) {
 			response.setHeader(r_token, get32uuid);
-		} else {
 			Cookie cookie = new Cookie(u_token, get32uuid);
 			cookie.setMaxAge(30 * 24 * 60 * 60);// 设置为30天
 			cookie.setPath("/");
 			response.addCookie(cookie);
-		}
-		redisTemplate.opsForValue().set(get32uuid, userResult.getUserId(), 30, TimeUnit.DAYS);
-		if (userResult == null) {
+		redisTemplate.opsForValue().set(get32uuid, userVO.getUserId(), 30, TimeUnit.DAYS);
+		if (userVO == null) {
 			return ResultVOUtil.success(ResultEnum.LOGIN_ERROE.getCode(), ResultEnum.LOGIN_ERROE.getMessage());
 		}
-		return ResultVOUtil.success(userResult);
+		return ResultVOUtil.success(userVO);
 	}
 
 	/**
 	 * <p>
-	 * Description: 验证码登陆(注册)
+	 * Description: 验证码登陆
 	 * </p>
 	 * 
 	 * @author JZR
 	 * @date 2018年4月10日
 	 */
-	@PostMapping("/codelogin")
-	public ResultVO<Map<String,Object>> codeLogin(@RequestParam(required = true) String telphone,
-			@RequestParam(required = true) String code, @RequestParam(name = "app", defaultValue = "false") Boolean app,
+	@PostMapping("/code/login")
+	public ResultVO<UserVO> codeLogin(@RequestBody UserTelphoneForm userTelphoneForm,
 			HttpServletRequest request, HttpServletResponse response) {
-		if (!codeService.checkCode(telphone, code))
+		if (!codeService.checkCode(userTelphoneForm.getTelphone(), userTelphoneForm.getCode()))
 			return ResultVOUtil.success(ResultEnum.CODE_ERROR.getCode(), ResultEnum.CODE_ERROR.getMessage());
-		Map<String, Object> findByTelphone = userService.findByTelphone(telphone);
+		UserVO userVO = userService.findByTelphone(userTelphoneForm.getTelphone());
 		// 添加token
 		String get32uuid = UUIDUtil.get32UUID();
-		if (app) {
 			response.setHeader(r_token, get32uuid);
-		} else {
+		/*		
 			Cookie cookie = new Cookie(u_token, get32uuid);
 			cookie.setMaxAge(30 * 24 * 60 * 60);// 设置为30min
 			cookie.setPath("/");
 			response.addCookie(cookie);
-		}
-		UserVO userVO = (UserVO)findByTelphone.get("userVO");
+		*/
 		redisTemplate.opsForValue().set(get32uuid, userVO.getUserId(), 30, TimeUnit.DAYS);
-		return ResultVOUtil.success(findByTelphone);
+		return ResultVOUtil.success(userVO);
 	}
 
 	/**
 	 * <p>
-	 * Description: 编辑用户资料
+	 * Description: 编辑用户昵称
 	 * </p>
 	 * 
 	 * @author JZR
@@ -208,9 +213,8 @@ public class UserController {
 	 * @date 2018年4月11日
 	 */
 	@PostMapping("/chpwd")
-	public ResultVO editPassword(@RequestParam(required = true) String userId,
-			@RequestParam(required = true) String oldpwd, @RequestParam(required = true) String newpwd) {
-		Boolean flag = userService.updatePwdByPwd(userId, oldpwd, newpwd);
+	public ResultVO editPassword(@RequestBody UserChpwdForm chpwdForm) {
+		Boolean flag = userService.updatePwdByPwd(chpwdForm.getUserId(), chpwdForm.getOldpwd(), chpwdForm.getNewpwd());
 		if (flag) {
 			return ResultVOUtil.success();
 		}
@@ -226,11 +230,11 @@ public class UserController {
 	 * @date 2018年4月11日
 	 */
 	@PostMapping("/chpwdbycode")
-	public ResultVO editPwdBycode(String userId, String telphone, String code, String newpwd) {
+	public ResultVO editPwdBycode(@RequestBody UserChpwdByTelForm userChpwdByTelForm) {
 		// 判断验证码
-		if (!codeService.checkCode(telphone, code))
+		if (!codeService.checkCode(userChpwdByTelForm.getTelphone(), userChpwdByTelForm.getCode()))
 			return ResultVOUtil.success(ResultEnum.CODE_ERROR.getCode(), ResultEnum.CODE_ERROR.getMessage());
-		userService.updatePwdByCode(userId, newpwd);
+		userService.updatePwdByCode(userChpwdByTelForm.getUserId(), userChpwdByTelForm.getNewpwd());
 		return ResultVOUtil.success();
 	}
 

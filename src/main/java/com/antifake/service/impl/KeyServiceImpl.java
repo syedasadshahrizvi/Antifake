@@ -1,9 +1,16 @@
 package com.antifake.service.impl;
 
+import java.io.FileOutputStream;
+import java.math.BigInteger;
 import java.security.KeyPair;
+import java.security.cert.X509Certificate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
+import javax.security.auth.x500.X500Principal;
+
+import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -37,6 +44,33 @@ public class KeyServiceImpl implements KeyService{
 		KeyPair keyPair = ECCUtil.getKeyPair();
 		String privateKey = ECCUtil.getPrivateKey(keyPair);
 		String publicKey = ECCUtil.getPublicKey(keyPair);
+		/*****创建证书******/
+		  X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
+	        // 设置序列号  
+	        certGen.setSerialNumber(new BigInteger("123"));  
+	        // 设置颁发者  
+	        certGen.setIssuerDN(new X500Principal("C=CN,ST=BJ,L=BJ,O=SICCA,OU=SC,CN=SICCA"));  
+	        // 设置有效期  
+	        Calendar c = Calendar.getInstance();
+	        c.add(Calendar.DATE, - 7);
+	        certGen.setNotBefore(c.getTime());  
+	        c.add(Calendar.YEAR, 7);
+	        certGen.setNotAfter(c.getTime());  
+	        // 设置使用者  
+	        certGen.setSubjectDN(new X500Principal("C=CN,ST=BJ,L=BJ,O=SICCA,OU=SC,CN=" + "JZR"));  
+	        // 公钥  
+	        certGen.setPublicKey(keyPair.getPublic());  
+	        // 签名算法  
+	        certGen.setSignatureAlgorithm("SHA1withECDSA");  
+	        X509Certificate cert = certGen.generateX509Certificate(keyPair.getPrivate(), "BC");  
+	        
+	        String certPath = "d:/jzr.cer";  
+	        
+	        
+	        FileOutputStream fos = new FileOutputStream(certPath);  
+	        fos.write(cert.getEncoded());  
+	        fos.close(); 
+		
 		
 		PubKey pubKey = new PubKey();
 		pubKey.setUserId(userId);

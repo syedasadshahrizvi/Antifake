@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.antifake.VO.UserVO;
+import com.antifake.converter.User2UserVO;
+import com.antifake.enums.ResultEnum;
+import com.antifake.exception.AntiFakeException;
 import com.antifake.mapper.PrivateKeyMapper;
 import com.antifake.mapper.PubKeyMapper;
 import com.antifake.mapper.PubKeyRepository;
@@ -22,7 +25,10 @@ import com.antifake.utils.ECCUtilsBak;
 import com.antifake.utils.MD5Utils;
 import com.antifake.utils.RegExUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -58,9 +64,10 @@ public class UserServiceImpl implements UserService {
 		//保存公钥
 		pubKeyRepository.save(pubKey);
 		
-		user.setPassword(null);
+		UserVO userVO = User2UserVO.converter(user);
+		
 		resultMap.put("privateKey", publicKeyStr);
-		resultMap.put("user", user);
+		resultMap.put("userVO", userVO);
 		
 		return resultMap;
 	}
@@ -88,14 +95,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Map<String,Object> findByTelphone(String telphone) {
-		Map<String,Object> resultMap = new HashMap<String,Object>();
+	public UserVO findByTelphone(String telphone) {
 		User user = new User();
 		user.setTelphone(telphone);
 		User userResult = userMapper.queryUserByUsernameOrTelphone(user);
 		UserVO userVO = new UserVO();
 		if (userResult == null) {
-			String userId = UUID.randomUUID().toString().replace("-", "");
+			log.error("【验证码登录】该手机号尚未注册！ telphone = {}", telphone);
+			throw new AntiFakeException(ResultEnum.TELPHONE_LOGIN_ERROR);
+			/*String userId = UUID.randomUUID().toString().replace("-", "");
 			user.setUserId(userId);
 			userMapper.insertSelective(user);
 			//初始化密钥
@@ -116,7 +124,7 @@ public class UserServiceImpl implements UserService {
 			PrivateKey privateKeyModel = new PrivateKey();
 			privateKeyModel.setUserId(userId);
 			privateKeyModel.setPrivateKey(privateKey);
-			resultMap.put("privateKey", privateKeyModel);
+			resultMap.put("privateKey", privateKeyModel);*/
 		}else {
 			userVO.setUserId(userResult.getUserId());
 			userVO.setNickname(userResult.getNickname());
@@ -125,8 +133,7 @@ public class UserServiceImpl implements UserService {
 			userVO.setStatus(userResult.getStatus());
 			userVO.setRoleList(userResult.getRoleList());
 		}
-		resultMap.put("userVO", userVO);
-		return resultMap;
+		return userVO;
 	}
 
 	@Override

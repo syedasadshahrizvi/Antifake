@@ -23,5 +23,9 @@ public class UserRegistForm {
 	/**	验证码.*/
 	@NotEmpty(message="验证码不能为空！")
 	private String code;
+	
+	/**	图片验证码.*/
+	@NotEmpty(message="验证码不能为空！")
+	private String imgCode;
 
 }
