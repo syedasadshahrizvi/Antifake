@@ -42,6 +42,12 @@ public class AntifakeController {
 		List<String> list = antifakeService.encrypt(antifakeFrom.getPrivateKey(), antifakeFrom.getCompanyId(), antifakeFrom.getCompanyCode(), antifakeFrom.getProductCode(), antifakeFrom.getTemplate(), antifakeFrom.getCount());
 		return ResultVOUtil.success(list);
 	}
+	
+	@PostMapping("/create2")
+	public ResultVO<List<String>> createCipher2(@RequestBody AntifakeFrom antifakeFrom) {
+		List<String> list = antifakeService.encrypt2(antifakeFrom.getPrivateKey(), antifakeFrom.getCompanyId(), antifakeFrom.getCompanyCode(), antifakeFrom.getProductCode(), antifakeFrom.getTemplate(), antifakeFrom.getCount());
+		return ResultVOUtil.success(list);
+	}
 
 	/**
 	 * <p>

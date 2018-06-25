@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 import com.antifake.VO.ExpreVO;
@@ -38,6 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@Transactional
 public class AntifakeServiceImpl implements AntifakeService {
 
 	public static final String checkCount = "0";
@@ -63,7 +65,71 @@ public class AntifakeServiceImpl implements AntifakeService {
 	// 待优化
 	public List<String> encrypt(String privateKey, Integer companyId, String companyCode, String productCode,
 			String template, Integer num) {
+		 // 开始时间
+        long start = System.currentTimeMillis();
+		List<String> listString = new ArrayList<String>();
+		List<Cipher> listCipher = new ArrayList<Cipher>();
+		// 存储明文
+		Expre expre = new Expre();
+		expre.setCompanyId(companyId);
+		expre.setProductExpre(template);
+		String batch = new SimpleDateFormat("yyMMddHHmmss").format(new Date());
+		expre.setBatch(batch);
+		expreMapper.insertExpre(expre);
+		String expreMD5 = MD5Utils.hash(template);
 
+		for (Integer i = 0; i < num; i++) {
+			// 递增
+			Long increment = redisTemplate.opsForValue().increment("" + companyCode + "_" + productCode, 1L);
+			if (increment > 999999999) {
+				redisTemplate.opsForValue().set("" + companyCode + "_" + productCode, "1");
+			}
+			String get12uuid = UUIDUtil.get12UUID();
+			// 加密
+			try {
+				Cipher cipher = new Cipher();
+				String templates = expreMD5 + "." + get12uuid;
+				// 获取私钥
+				ECPublicKey publicKey = ECCUtil.string2PublicKey(privateKey);
+				// 加密
+				byte[] publicEncrypt = ECCUtil.publicEncrypt(templates.getBytes(), publicKey);
+				// 启用加密
+				byte[] validByte = ECCUtil.publicEncrypt(CipherStatus.UP.getCode().getBytes(), publicKey);
+				String encrypt = Base64Utils.encodeToString(publicEncrypt);
+				String valid = Base64Utils.encodeToString(validByte);
+				String substringBegin = encrypt.substring(0, 10);
+				String substringLast = StringUtils.substring(encrypt, 10);
+				String stringCode = "" + companyCode + "." + productCode + "." + substringBegin + "." + increment;
+				cipher.setCompanyId(companyId);
+				cipher.setCompanyCode(companyCode);
+				cipher.setProductCode(productCode);
+				cipher.setCipherText(substringLast);
+				cipher.setBatch(batch);
+				cipher.setCode("" + increment);
+				cipher.setValid(valid);
+				cipher.setValid(Base64Utils.encodeToString(ECCUtil.publicEncrypt("0".getBytes(), publicKey)));
+				listCipher.add(cipher);
+				listString.add(stringCode);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		 long end = System.currentTimeMillis();
+		 System.out.println("数据处理耗时："+(end-start));
+		// 存储加密信息
+		long start2 = System.currentTimeMillis();
+		cipherMapper.insertList(listCipher);
+		System.err.println("存储耗时 ：" + (System.currentTimeMillis() - start2) + "毫秒");
+		return listString;
+	}
+	
+	@Override
+	// 待优化
+	public List<String> encrypt2(String privateKey, Integer companyId, String companyCode, String productCode,
+			String template, Integer num) {
+		
+		 // 开始时间
+        long start = System.currentTimeMillis();
 		List<String> listString = new ArrayList<String>();
 		List<Cipher> listCipher = new ArrayList<Cipher>();
 		// 存储明文
@@ -112,7 +178,8 @@ public class AntifakeServiceImpl implements AntifakeService {
 			}
 		}
 		// 存储加密信息
-		cipherMapper.insertList(listCipher);
+		//cipherMapper.insertList(listCipher);
+		System.err.println("数据处理耗时 ：" + (System.currentTimeMillis() - start) + "毫秒");
 		return listString;
 	}
 

@@ -14,6 +14,7 @@ import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.antifake.VO.UserVO;
 import com.antifake.converter.User2UserVO;
@@ -28,6 +29,7 @@ import com.antifake.service.KeyService;
 import com.antifake.utils.ECCUtil;
 
 @Service
+@Transactional
 public class KeyServiceImpl implements KeyService{
 	
 	public static final Integer STATUS = 1;
@@ -70,7 +72,6 @@ public class KeyServiceImpl implements KeyService{
 	        FileOutputStream fos = new FileOutputStream(certPath);  
 	        fos.write(cert.getEncoded());  
 	        fos.close(); 
-		
 		
 		PubKey pubKey = new PubKey();
 		pubKey.setUserId(userId);

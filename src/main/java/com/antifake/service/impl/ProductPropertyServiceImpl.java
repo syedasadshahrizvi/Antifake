@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.antifake.mapper.ProductPropertyRepository;
 import com.antifake.model.ProductProperty;
 import com.antifake.service.ProductPropertyService;
 
 @Service
+@Transactional
 public class ProductPropertyServiceImpl implements ProductPropertyService{
 	
 	public static final Integer STATUS = 1;

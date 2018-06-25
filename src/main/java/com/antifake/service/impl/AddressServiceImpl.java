@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.antifake.VO.AddressVO;
 import com.antifake.converter.Address2AddressVO;
@@ -14,6 +15,7 @@ import com.antifake.model.Address;
 import com.antifake.service.AddressService;
 
 @Service
+@Transactional
 public class AddressServiceImpl implements AddressService{
 	
 	public static final Integer TRUE_STATUS = 1;
