@@ -1,6 +1,15 @@
 package com.antifake.service.impl;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +21,7 @@ import com.antifake.mapper.CompanyMapper;
 import com.antifake.mapper.UserMapper;
 import com.antifake.model.Company;
 import com.antifake.service.CompanyService;
+import com.antifake.utils.ECCUtil;
 
 @Service
 @Transactional
@@ -63,6 +73,85 @@ public class CompanyServiceImpl implements CompanyService{
 	public List<Company> selectCompanyList(Integer status, String userId) {
 		List<Company> companyList = companyMapper.selectList(status,userId);
 		return companyList;
+	}
+	
+	@Override
+	public void saveCertificate(String cer,int id) throws Exception   {
+		
+		 String certPath = "./src/main/resources/cert/"+ id +".cer";  
+		 File file = new File(certPath);
+	     FileWriter fw = new FileWriter(file);
+	     System.out.println(cer);
+	     fw.write(cer);
+	     fw.flush();   
+	     fw.close(); 
+		
+	}
+	public void downloadCertificate(HttpServletResponse res,int id) throws Exception   {
+		
+		String fileName =""+id+".cer";
+		res.setHeader("content-type", "application/octet-stream");
+		res.setContentType("application/octet-stream");
+		res.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+		byte[] buff = new byte[1024];
+		BufferedInputStream bis = null;
+		OutputStream os = null;
+		try {
+			os = res.getOutputStream();
+			bis = new BufferedInputStream(new FileInputStream(new File("./src/main/resources/cert/"+fileName)));
+			int i = bis.read(buff);
+			while (i != -1) {
+				os.write(buff, 0, buff.length);
+				os.flush();
+				i = bis.read(buff);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (bis != null) {
+				try {
+					bis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	    }
+
+		
+	     
+	       
+	 
+	
+	public void deleteCertificate(int id) throws Exception   {
+		
+		
+
+    		
+    		File file = new File("./src/main/resources/cert/"+id+".cer");
+        	
+    		if(file.delete()){
+    			System.out.println(file.getName() + " is deleted!");
+    		}
+    	
+    
+	       
+	     
+	       
+		 
+	}
+	@Override
+	public HashMap<String, Object> addCompanyKey(int id) throws Exception  {
+		
+		
+		HashMap<String, Object> map = ECCUtil.getPublickey();
+		String pkey=(String)map.get("1");
+		String cert=(String)map.get("2");
+		
+		
+		companyMapper.insertPKey(pkey, id,0);
+		
+		return map;
 	}
 
 }

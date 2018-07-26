@@ -30,11 +30,11 @@
     values (#{companyId,jdbcType=INTEGER},#{userId,jdbcType=VARCHAR},#{companyName,jdbcType=VARCHAR}, #{registerId,jdbcType=VARCHAR}, #{level,jdbcType=TINYINT}, 
       #{status,jdbcType=TINYINT}, #{businessLicense,jdbcType=VARCHAR})
   </insert>
+  <insert id="insertPKey"> insert into company_pub_keys (company_id,public_key,status) values (#{companyId,jdbcType=INTEGER},#{companyPublicKey,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}) </insert>
   <insert id="insertSelective" parameterType="com.antifake.model.Company" useGeneratedKeys="true" keyProperty="companyId" keyColumn="company_id">
     insert into company_company
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="companyId != null" >
-        company_id,
       </if>
        <if test="userId != null" >
         user_id,

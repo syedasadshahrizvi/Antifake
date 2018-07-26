@@ -12,6 +12,8 @@ public interface CompanyMapper {
     int insert(Company record);
 
     Integer insertSelective(Company record);
+    
+    Integer insertPKey(String companyPublicKey,Integer companyId,Integer status);
 
     Company selectByPrimaryKey(Integer companyId);
 

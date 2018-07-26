@@ -13,6 +13,7 @@ import java.security.cert.X509Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import javax.crypto.Cipher;
 import javax.security.auth.x500.X500Principal;
@@ -84,6 +85,41 @@ public class ECCUtil {
         byte[] bytes = cipher.doFinal(content);  
         return bytes;  
     }  
+    
+    public static HashMap<String, Object> getPublickey() throws Exception
+    {
+    	
+    	 KeyPair keyPair = ECCUtil.getKeyPair();  
+    	
+         String publicKeyStr = ECCUtil.getPublicKey(keyPair);      
+         String privateKeyStr = ECCUtil.getPrivateKey(keyPair);
+         
+         X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
+         // 设置序列号  
+         certGen.setSerialNumber(new BigInteger("123"));  
+         // 设置颁发者  
+         certGen.setIssuerDN(new X500Principal("C=CN,ST=BJ,L=BJ,O=SICCA,OU=SC,CN=SICCA"));  
+         // 设置有效期  
+         Calendar c = Calendar.getInstance();
+         c.add(Calendar.DATE, - 7);
+         certGen.setNotBefore(c.getTime());  
+         c.add(Calendar.YEAR, 7);
+         certGen.setNotAfter(c.getTime());  
+         // 设置使用者  
+         certGen.setSubjectDN(new X500Principal("C=CN,ST=BJ,L=BJ,O=SICCA,OU=SC,CN=" + "JZR"));  
+         // 公钥  
+         certGen.setPublicKey(keyPair.getPublic());  
+         // 签名算法  
+         certGen.setSignatureAlgorithm("SHA1withECDSA");  
+         X509Certificate cert = certGen.generateX509Certificate(keyPair.getPrivate(), "BC");   
+         
+         
+         HashMap<String, Object> map=new HashMap<>();
+         map.put("1",publicKeyStr);
+         map.put("2", cert.getEncoded().toString());
+      
+         return map;
+    }
       
     public static void main(String[] args) throws Exception {  
         KeyPair keyPair = ECCUtil.getKeyPair();  

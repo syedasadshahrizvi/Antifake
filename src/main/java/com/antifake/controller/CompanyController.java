@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,40 @@ public class CompanyController {
 		resultMap.put("companyId", company.getCompanyId());
 		return ResultVOUtil.success(resultMap);
 	}
+	@GetMapping("/newCompany/{id}")
+	public void newCompanyKey( @PathVariable(name= "id") int id, HttpServletResponse res ){
+		
+		HashMap<String, Object> map;
+		String cer;
+		try {
+			map = companyService.addCompanyKey(id);
+		} catch (Exception e) {
+			
+			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(), "add companyPublickeyError");
+		}
+		Map<String,Object> resultMap = new HashMap<>();
+		cer=(String) map.get("2");
 	
+		resultMap.put("Certificate", cer);
+	
+		resultMap.put("PublicKey", map.get("1"));
+		
+		resultMap.put("CompanyId", id);
+	
+		
+		try {
+			
+			companyService.saveCertificate(cer,id);
+			
+			companyService.downloadCertificate(res,id);
+			
+			companyService.deleteCertificate(id);
+			System.out.println("success");
+		} catch (Exception e) {
+			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(), "saving Certifacate Error");
+		}
+		//return ResultVOUtil.success(resultMap);
+	}
 	/**
 	 * <p>Description: 查询用户名下的公司</p>
 	 * @author JZR  
