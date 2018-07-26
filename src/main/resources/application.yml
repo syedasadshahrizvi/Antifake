@@ -1,5 +1,7 @@
 server:
   port: 8080
+  servlet:
+    context-path: /antifake
   
 
 spring:
@@ -29,10 +31,10 @@ spring:
     maxOpenPreparedStatements: 20
   #redis配置
   redis:
-     host: 127.0.0.1
+     host: www.mlnode.com
      database: 0
      password: 
-     port: 6379
+     port: 3306
      timeout: 30000 
 mybatis:
   mapper-locations: classpath:mapping/*.xml

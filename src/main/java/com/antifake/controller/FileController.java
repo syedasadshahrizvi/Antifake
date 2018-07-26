@@ -2,6 +2,7 @@ package com.antifake.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,8 +18,14 @@ import com.antifake.utils.UUIDUtil;
 
 @RestController
 @RequestMapping("/file")
+@CrossOrigin
 public class FileController {
 
+	/**
+	  * <p>Description: 文件上传</p>
+	  * @author JZR  
+	  * @date 2018年6月28日
+	  */
 	@PostMapping
 	@RequestMapping("/upload")
 	public ResultVO fileUpload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {

@@ -24,7 +24,7 @@
 	</properties>
 
 	<dependencies>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -34,9 +34,9 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
@@ -99,11 +99,17 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
-		  <groupId>org.bouncycastle</groupId>
-		  <artifactId>bcpkix-jdk15on</artifactId>
-		  <version>1.55</version>
-		  <type>pom</type>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk15on</artifactId>
+			<version>1.55</version>
+			<type>pom</type>
 		</dependency>
+		<!-- 热部署模块 -->
+		<!-- <dependency> 
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional> 这个需要为 true 热部署才有效
+		</dependency> -->
 	</dependencies>
 
 	<build>
@@ -112,17 +118,26 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!-- mybatis generator 自动生成代码插件 -->
+			<!-- docker远程部署 -->
 			<plugin>
-				<groupId>org.mybatis.generator</groupId>
-				<artifactId>mybatis-generator-maven-plugin</artifactId>
-				<version>1.3.2</version>
-				<configuration>
-					<configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml</configurationFile>
-					<overwrite>true</overwrite>
-					<verbose>true</verbose>
-				</configuration>
-			</plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <!-- 注意imageName一定要是符合正则[a-z0-9-_.]的，否则构建不会成功 -->
+                    <!-- 详见：https://github.com/spotify/docker-maven-plugin    Invalid repository name ... only [a-z0-9-_.] are allowed-->
+                    <imageName>antifake</imageName>
+                    <baseImage>java</baseImage>
+                    <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 

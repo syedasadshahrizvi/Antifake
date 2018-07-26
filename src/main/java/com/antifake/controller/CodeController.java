@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/code")
 @Slf4j
+@CrossOrigin
 public class CodeController {
 	
 	@Autowired

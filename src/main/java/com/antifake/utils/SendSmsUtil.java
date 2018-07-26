@@ -48,8 +48,8 @@ public class SendSmsUtil {
         final String product = "Dysmsapi";//短信API产品名称（短信产品名固定，无需修改）
         final String domain = "dysmsapi.aliyuncs.com";//短信API产品域名（接口地址固定，无需修改）
         //替换成你的AK
-        final String accessKeyId = "LTAIJTcSo2vbgJcq";//你的accessKeyId,
-        final String accessKeySecret = "2blkCF4I4CtYxsEXyxli6aa7aL9m0U";//你的accessKeySecret，
+        final String accessKeyId = "LTAIgtZgj1bBIL9x";//你的accessKeyId,
+        final String accessKeySecret = "Nnv8bUVJyJmMjTeWUqTfo6NDj3CwMo";//你的accessKeySecret，
         //初始化ascClient,暂时不支持多region（请勿修改）
         IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId,
                 accessKeySecret);
@@ -82,7 +82,7 @@ public class SendSmsUtil {
          //必填:短信签名-可在短信控制台中找到
          request.setSignName("妙联数字科技");
          //必填:短信模板-可在短信控制台中找到
-         request.setTemplateCode("SMS_130921868");
+         request.setTemplateCode("SMS_140560433");
          //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
          //友情提示:如果JSON中需要带换行符,请参照标准的JSON协议对换行符的要求,比如短信内容中包含\r\n的情况在JSON中需要表示成\\r\\n,否则会导致JSON在服务端解析失败
          if(!StringUtils.isEmpty(templateParam)){

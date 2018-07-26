@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/company")
 @Slf4j
+@CrossOrigin
 public class CompanyController {
 	
 	@Autowired
@@ -108,6 +110,7 @@ public class CompanyController {
 	 * @author JZR  
 	 * @date 2018年4月12日 
 	 */
+	@GetMapping("/all")
 	public ResultVO<List<Company>> listCompany(@RequestParam(required=false) Integer status,@RequestParam(required=false) String userId){
 		List<Company> companyList = companyService.selectCompanyList(status,userId);
 		return ResultVOUtil.success(companyList);
