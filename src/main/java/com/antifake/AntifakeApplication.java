@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class AntifakeApplication {
 
 	public static void main(String[] args) {
-		
+		//test
 		SpringApplication.run(AntifakeApplication.class, args);
 	}
 }
