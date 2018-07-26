@@ -9,6 +9,7 @@ public class Product {
 	private String companyCode;
 	
 	private String productCode;
+	private String productTitle;
 	
 	private String template;
 
@@ -35,6 +36,20 @@ public class Product {
 	public void setCompanyCode(String companyCode) {
 		this.companyCode = companyCode;
 	}
+	
+	
+	
+	public String getProductTitle() {
+		return productTitle;
+	}
+
+	public void setProductTitle(String productTitle) {
+		this.productTitle = productTitle;
+	}
+	
+	
+	
+	
 
 	public String getProductCode() {
 		return productCode;

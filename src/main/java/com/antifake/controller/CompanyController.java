@@ -125,7 +125,7 @@ public class CompanyController {
 	 * @date 2018年4月12日 
 	 */
 	@PostMapping("/update")
-	public ResultVO<Map<String,Object>> changeCompany(@Valid CompanyForm companyForm, BindingResult bindingResult) {
+	public ResultVO<Map<String,Object>> changeCompany(@Valid @RequestBody CompanyForm companyForm, BindingResult bindingResult) {
 		
 		if(bindingResult.hasErrors() || companyForm.getCompanyId()==null ) {
 			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(), bindingResult.getFieldError().getDefaultMessage());

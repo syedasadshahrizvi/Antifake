@@ -12,9 +12,9 @@
     product_id, company_id,company_code,product_code, template
   </sql>
   <insert id="createProduct" parameterType="com.antifake.model.Product" >
-    insert into company_product (company_id,company_code,product_code,template
+    insert into company_product (company_id,company_code,product_code,template,product_title
       )
-    values (#{companyId,jdbcType=INTEGER},#{companyCode,jdbcType=VARCHAR},#{productCode,jdbcType=VARCHAR}, #{template,jdbcType=VARCHAR}
+    values (#{companyId,jdbcType=INTEGER},#{companyCode,jdbcType=VARCHAR},#{productCode,jdbcType=VARCHAR}, #{template,jdbcType=VARCHAR},#{productTitle,jdbcType=VARCHAR}
       )
   </insert>
   <select id="queryByCCode" resultMap="BaseResultMap">

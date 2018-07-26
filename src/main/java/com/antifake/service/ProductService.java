@@ -12,7 +12,7 @@ public interface ProductService {
 	  * @author JZR  
 	  * @date 2018年4月17日
 	  */
-	Integer createProduct(Integer companyId,String companyCode,String productCode, String template);
+	Integer createProduct(Product product);
 
 
 	/**

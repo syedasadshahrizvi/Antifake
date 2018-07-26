@@ -27,13 +27,13 @@ public class ProductServiceImpl implements ProductService{
 	
 
 	@Override
-	public Integer createProduct(Integer companyId,String companyCode,String productCode, String template) {
+	public Integer createProduct(Product product) {
 		//查询公司状态
-		Company company = companyMapper.selectByPrimaryKey(companyId);
+		Company company = companyMapper.selectByPrimaryKey(product.getCompanyId());
 		if(company==null || company.getStatus()==0) {
 			throw new AntiFakeException(ResultEnum.COMPANY_ERROR.getCode(), ResultEnum.COMPANY_ERROR.getMessage());
 		}
-		Integer flag = productMapper.createProduct(companyId,companyCode,productCode,template);
+		Integer flag = productMapper.createProduct(product);
 		return flag;
 	}
 

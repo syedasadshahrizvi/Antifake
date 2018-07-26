@@ -8,7 +8,7 @@ import com.antifake.model.Product;
 
 public interface ProductMapper {
 
-	Integer createProduct(@Param("companyId")Integer companyId,@Param("companyCode")String companyCode,@Param("productCode")String productCode, @Param("template")String template);
+	Integer createProduct(Product product);
 
 	Product queryByCCode(@Param("companyCode")String companyCode);
 
