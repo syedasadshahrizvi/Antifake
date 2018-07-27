@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.antifake.VO.ExpreVO;
+import com.antifake.model.Antifake;
 import com.antifake.model.Cipher;
 
 public interface AntifakeService {
@@ -30,7 +31,8 @@ public interface AntifakeService {
 	  * @author JZR  
 	  * @date 2018年5月28日
 	  */
-	Cipher updateCipher(Integer cipherId, Integer companyId,String privateKey,String status) throws Exception;
+	//Cipher updateCipher(Integer cipherId, Integer companyId,String privateKey,String status) throws Exception;
+	Cipher updateCipher(Antifake antifake) throws Exception;
 
 	/**
 	  * <p>Description: 按批次作废/召回</p>
@@ -44,15 +46,16 @@ public interface AntifakeService {
 	  * @author JZR  
 	  * @date 2018年5月28日
 	  */
-	Integer updateCodeCipher(Integer companyId, String begain, String end, String privateKey,String status) throws Exception;
+	//Integer updateCodeCipher(Integer companyId, String begain, String end, String privateKey,String status) throws Exception;
+	Integer updateCodeCipher(Antifake antifake) throws Exception;
 
 	/**
 	  * <p>Description: 查询统计</p>
 	  * @author JZR  
 	  * @date 2018年5月29日
 	  */
-	List<Cipher> listCipher(Integer companyId, String companyCode, String productCode, String batch,
-			String orderBy, Integer pageNum, Integer pageSize) throws Exception;
+	//List<Cipher> listCipher(Integer companyId, String companyCode, String productCode, String batch,String orderBy, Integer pageNum, Integer pageSize) throws Exception;
+	List<Cipher> listCipher(Antifake antifake,String orderBy,Integer pageNum,Integer pageSize) throws Exception;
 
 	/**
 	  * <p>Description: 查询明文</p>

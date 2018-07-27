@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.antifake.model.Antifake;
 import com.antifake.model.Cipher;
 
 public interface CipherMapper {
@@ -55,9 +56,8 @@ public interface CipherMapper {
 	  * @author JZR  
 	  * @date 2018年5月29日
 	  */
-	List<Cipher> listCipher(@Param("companyId")Integer companyId, @Param("companyCode")String companyCode, @Param("productCode")String productCode, @Param("batch")String batch,
-			@Param("orderBy")String orderBy, @Param("pageNum")Integer pageNum, @Param("pageSize")Integer pageSize);
-
+	//List<Cipher> listCipher(@Param("companyId")Integer companyId, @Param("companyCode")String companyCode, @Param("productCode")String productCode, @Param("batch")String batch,@Param("orderBy")String orderBy, @Param("pageNum")Integer pageNum, @Param("pageSize")Integer pageSize);
+	List<Cipher> listCipher(@Param("antifake")Antifake antifake,@Param("orderBy")String orderBy, @Param("pageNum")Integer pageNum, @Param("pageSize")Integer pageSize);
 	/**
 	  * <p>Description: 查询总量</p>
 	  * @author JZR  

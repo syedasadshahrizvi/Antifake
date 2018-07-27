@@ -22,7 +22,6 @@ import com.antifake.model.User;
 import com.antifake.model.PubKey;
 import com.antifake.service.UserService;
 import com.antifake.utils.ECCUtil;
-import com.antifake.utils.ECCUtilsBak;
 import com.antifake.utils.MD5Utils;
 import com.antifake.utils.RegExUtils;
 

@@ -60,7 +60,7 @@ public class CompanyController {
 		resultMap.put("companyId", company.getCompanyId());
 		return ResultVOUtil.success(resultMap);
 	}
-	@GetMapping("/newCompany/{id}")
+	@GetMapping("/newCompanyKey/{id}")
 	public void newCompanyKey( @PathVariable(name= "id") int id, HttpServletResponse res ){
 		
 		HashMap<String, Object> map;

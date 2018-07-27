@@ -24,10 +24,13 @@ import com.antifake.enums.ResultEnum;
 import com.antifake.exception.AntiFakeException;
 import com.antifake.mapper.CipherMapper;
 import com.antifake.mapper.CompanyMapper;
+import com.antifake.mapper.CompanyPubKeyRepository;
 import com.antifake.mapper.ExpreMapper;
 import com.antifake.mapper.PubKeyRepository;
+import com.antifake.model.Antifake;
 import com.antifake.model.Cipher;
 import com.antifake.model.Company;
+import com.antifake.model.CompanyPubKey;
 import com.antifake.model.Expre;
 import com.antifake.model.PubKey;
 import com.antifake.service.AntifakeService;
@@ -44,7 +47,7 @@ public class AntifakeServiceImpl implements AntifakeService {
 
 	public static final String checkCount = "0";
 	public static final String requestType = "S1S";
-	public static final Integer STATUS = 1;
+	public static final Integer STATUS = 0;
 
 	@Autowired
 	private CipherMapper cipherMapper;
@@ -54,6 +57,9 @@ public class AntifakeServiceImpl implements AntifakeService {
 
 	@Autowired
 	private PubKeyRepository pubKeyRepository;
+	
+	@Autowired
+	private CompanyPubKeyRepository companyPubKeyRepository;
 
 	@Autowired
 	private StringRedisTemplate redisTemplate;
@@ -254,7 +260,7 @@ public class AntifakeServiceImpl implements AntifakeService {
 		return resultMap;
 	}
 
-	@Override
+/*	@Override
 	public Cipher updateCipher(Integer cipherId, Integer companyId, String privateKey, String status) throws Exception {
 		// 获取私钥
 		ECPublicKey publicKey = ECCUtil.string2PublicKey(privateKey);
@@ -271,6 +277,28 @@ public class AntifakeServiceImpl implements AntifakeService {
 		Cipher cipher = new Cipher();
 		cipher.setCipherId(cipherId);
 		cipher.setCompanyId(companyId);
+		cipher.setValid(valid);
+		cipherMapper.updateValid(cipher);
+		return cipher;
+	}*/
+	
+	@Override
+	public Cipher updateCipher(Antifake antifake) throws Exception {
+		// 获取私钥
+		ECPublicKey publicKey = ECCUtil.string2PublicKey(antifake.getPrivateKey());
+		// 启用加密
+		byte[] validByte = null;
+		if (antifake.getStatus().equals(CipherStatus.DOWN.getCode())) {
+			validByte = ECCUtil.publicEncrypt(CipherStatus.DOWN.getCode().getBytes(), publicKey);
+		} else if (antifake.getStatus().equals(CipherStatus.BACK.getCode())) {
+			validByte = ECCUtil.publicEncrypt(CipherStatus.BACK.getCode().getBytes(), publicKey);
+		} else {
+			throw new AntiFakeException(ResultEnum.PARAM_ERROR);
+		}
+		String valid = Base64Utils.encodeToString(validByte);
+		Cipher cipher = new Cipher();
+		cipher.setCipherId(antifake.getCipherId());
+		cipher.setCompanyId(antifake.getCompanyId());
 		cipher.setValid(valid);
 		cipherMapper.updateValid(cipher);
 		return cipher;
@@ -299,7 +327,7 @@ public class AntifakeServiceImpl implements AntifakeService {
 		return flag;
 	}
 
-	@Override
+	/*@Override
 	public Integer updateCodeCipher(Integer companyId, String begain, String end, String privateKey, String status)
 			throws Exception {
 		// 获取密钥
@@ -316,9 +344,28 @@ public class AntifakeServiceImpl implements AntifakeService {
 		String valid = Base64Utils.encodeToString(validByte);
 		Integer flag = cipherMapper.updateValidByCode(companyId, begain, end, valid);
 		return flag;
-	}
+	}*/
 
 	@Override
+	public Integer updateCodeCipher(Antifake antifake)
+			throws Exception {
+		// 获取密钥
+		ECPublicKey publicKey = ECCUtil.string2PublicKey(antifake.getPrivateKey());
+		// 启用加密
+		byte[] validByte = null;
+		if (antifake.getStatus().equals(CipherStatus.DOWN.getCode())) {
+			validByte = ECCUtil.publicEncrypt(CipherStatus.DOWN.getCode().getBytes(), publicKey);
+		} else if (antifake.getStatus().equals(CipherStatus.BACK.getCode())) {
+			validByte = ECCUtil.publicEncrypt(CipherStatus.BACK.getCode().getBytes(), publicKey);
+		} else {
+			throw new AntiFakeException(ResultEnum.PARAM_ERROR);
+		}
+		String valid = Base64Utils.encodeToString(validByte);
+		Integer flag = cipherMapper.updateValidByCode(antifake.getCompanyId(), antifake.getBegain(),antifake.getEnd() , valid);
+		return flag;
+	}
+	
+	/*@Override
 	public List<Cipher> listCipher(Integer companyId, String companyCode, String productCode, String batch,
 			String orderBy, Integer pageNum, Integer pageSize) throws Exception {
 		pageNum = pageNum*pageSize;
@@ -347,12 +394,48 @@ public class AntifakeServiceImpl implements AntifakeService {
 						log.error("【解密操作】秘钥不匹配", e);
 					}
 				}
+	 			
+			}
+		}
+		return listCipher;
+	}*/
+	@Override
+	public List<Cipher> listCipher(Antifake antifake,String orderBy,Integer pageNum,Integer pageSize) throws Exception {
+		//antifake.setPageNum(antifake.getPageNum()* antifake.getPageSize());
+		pageNum = pageNum*pageSize;
+		List<Cipher> listCipher = cipherMapper.listCipher(antifake,orderBy,pageNum,pageSize);
+		
+		//获取公钥
+		// 查询公钥
+		Company company = companyMapper.selectByPrimaryKey(antifake.getCompanyId());
+		CompanyPubKey companyPubKey = new CompanyPubKey();
+		companyPubKey.setCompanyId((Integer)company.getCompanyId());
+		companyPubKey.setStatus(STATUS);
+		
+		Example<CompanyPubKey> example = Example.of(companyPubKey);
+		List<CompanyPubKey> userKeyList = companyPubKeyRepository.findAll(example);
+		if(listCipher.size()>0) {
+			for (Cipher cipher : listCipher) {
+				byte[] validByte = Base64Utils.decodeFromString(cipher.getValid());
+				for (CompanyPubKey pubKey : userKeyList) {
+					try {
+						String publicKey = pubKey.getPublicKey();
+						ECPrivateKey privateKey = ECCUtil.string2PrivateKey(publicKey);
+						byte[] privateDecrypt = ECCUtil.privateDecrypt(validByte, privateKey);
+						String valid = new String(privateDecrypt);
+						cipher.setValid(valid);
+
+					} catch (Exception e) {
+						log.error("【解密操作】秘钥不匹配", e);
+					}
+				}
 				
 			}
 		}
 		return listCipher;
 	}
-
+	
+	
 	@Override
 	public List<ExpreVO> listExpre(Integer companyId,Integer pageNum,Integer pageSize) {
 		pageNum = pageNum*pageSize;
