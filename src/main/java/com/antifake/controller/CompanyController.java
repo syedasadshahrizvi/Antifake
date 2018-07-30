@@ -46,7 +46,7 @@ public class CompanyController {
 	 * @date 2018年4月12日 
 	 */
 	@PostMapping("/add")
-	@LoginRequired
+	//@LoginRequired
 	public ResultVO<Map<String,Object>> applyCompany(@Valid @RequestBody CompanyForm companyForm, BindingResult bindingResult){
 		
 		if(bindingResult.hasErrors()) {
@@ -60,6 +60,10 @@ public class CompanyController {
 		resultMap.put("companyId", company.getCompanyId());
 		return ResultVOUtil.success(resultMap);
 	}
+	
+	
+	
+	
 	@GetMapping("/newCompanyKey/{id}")
 	public void newCompanyKey( @PathVariable(name= "id") int id, HttpServletResponse res ){
 		

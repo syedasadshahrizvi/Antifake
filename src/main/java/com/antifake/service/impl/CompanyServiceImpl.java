@@ -134,9 +134,6 @@ public class CompanyServiceImpl implements CompanyService{
     			System.out.println(file.getName() + " is deleted!");
     		}
     	
-    
-	       
-	     
 	       
 		 
 	}
@@ -145,11 +142,11 @@ public class CompanyServiceImpl implements CompanyService{
 		
 		
 		HashMap<String, Object> map = ECCUtil.getPublickey();
-		String pkey=(String)map.get("1");
+		String privatekey=(String)map.get("1");
 		String cert=(String)map.get("2");
 		
 		
-		companyMapper.insertPKey(pkey, id,0);
+		companyMapper.insertPKey(privatekey, id,0);
 		
 		return map;
 	}

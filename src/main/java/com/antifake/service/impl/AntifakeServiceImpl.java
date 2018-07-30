@@ -100,9 +100,9 @@ public class AntifakeServiceImpl implements AntifakeService {
 				// 加密
 				byte[] publicEncrypt = ECCUtil.publicEncrypt(templates.getBytes(), publicKey);
 				// 启用加密
-				byte[] validByte = ECCUtil.publicEncrypt(CipherStatus.UP.getCode().getBytes(), publicKey);
+				//byte[] validByte = ECCUtil.publicEncrypt(CipherStatus.UP.getCode().getBytes(), publicKey);
 				String encrypt = Base64Utils.encodeToString(publicEncrypt);
-				String valid = Base64Utils.encodeToString(validByte);
+				//String valid = Base64Utils.encodeToString(validByte);
 				String substringBegin = encrypt.substring(0, 10);
 				String substringLast = StringUtils.substring(encrypt, 10);
 				String stringCode = "" + companyCode + "." + productCode + "." + substringBegin + "." + increment;
@@ -112,8 +112,8 @@ public class AntifakeServiceImpl implements AntifakeService {
 				cipher.setCipherText(substringLast);
 				cipher.setBatch(batch);
 				cipher.setCode("" + increment);
-				cipher.setValid(valid);
-				cipher.setValid(Base64Utils.encodeToString(ECCUtil.publicEncrypt("0".getBytes(), publicKey)));
+				//cipher.setValid(valid);
+				cipher.setValid(Base64Utils.encodeToString(ECCUtil.publicEncrypt(CipherStatus.UP.getCode().getBytes(), publicKey)));
 				listCipher.add(cipher);
 				listString.add(stringCode);
 			} catch (Exception e) {
@@ -207,11 +207,13 @@ public class AntifakeServiceImpl implements AntifakeService {
 		// 查询公钥
 		Company company = companyMapper.selectByPrimaryKey(resultCipher.getCompanyId());
 
-		PubKey pubKeyExample = new PubKey();
-		pubKeyExample.setUserId(company.getUserId());
-		pubKeyExample.setStatus(STATUS);
-		Example<PubKey> example = Example.of(pubKeyExample);
-		List<PubKey> userKeyList = pubKeyRepository.findAll(example);
+		CompanyPubKey companyPubKey = new CompanyPubKey();
+		companyPubKey.setCompanyId((Integer)company.getCompanyId());
+		companyPubKey.setStatus(STATUS);
+		
+		Example<CompanyPubKey> example = Example.of(companyPubKey);
+		List<CompanyPubKey> userKeyList = companyPubKeyRepository.findAll(example);
+		
 		// 完整密文
 
 		cipherText = cipherText + resultCipher.getCipherText();
@@ -220,7 +222,7 @@ public class AntifakeServiceImpl implements AntifakeService {
 		byte[] validByte = Base64Utils.decodeFromString(resultCipher.getValid());
 		byte[] decrypt = null;
 		String valid = null;
-		for (PubKey pubKey : userKeyList) {
+		for (CompanyPubKey pubKey : userKeyList) {
 			try {
 				String publicKey = pubKey.getPublicKey();
 				ECPrivateKey privateKey = ECCUtil.string2PrivateKey(publicKey);

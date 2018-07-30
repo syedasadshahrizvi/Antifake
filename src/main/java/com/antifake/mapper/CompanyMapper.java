@@ -13,7 +13,7 @@ public interface CompanyMapper {
 
     Integer insertSelective(Company record);
     
-    Integer insertPKey(String companyPublicKey,Integer companyId,Integer status);
+    Integer insertPKey(@Param("companyPublicKey")String companyPublicKey,@Param("companyId")Integer companyId,@Param("status")Integer status);
 
     Company selectByPrimaryKey(Integer companyId);
 

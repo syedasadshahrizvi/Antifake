@@ -91,8 +91,10 @@ public class ECCUtil {
     	
     	 KeyPair keyPair = ECCUtil.getKeyPair();  
     	
-         String publicKeyStr = ECCUtil.getPublicKey(keyPair);      
+         String publicKeyStr = ECCUtil.getPublicKey(keyPair);   
+         System.out.println(publicKeyStr);
          String privateKeyStr = ECCUtil.getPrivateKey(keyPair);
+         System.out.println(privateKeyStr);
          
          X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
          // 设置序列号  
@@ -115,7 +117,7 @@ public class ECCUtil {
          
          
          HashMap<String, Object> map=new HashMap<>();
-         map.put("1",publicKeyStr);
+         map.put("1",privateKeyStr);
          map.put("2", cert.getEncoded().toString());
       
          return map;
