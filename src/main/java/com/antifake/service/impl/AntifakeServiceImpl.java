@@ -69,7 +69,7 @@ public class AntifakeServiceImpl implements AntifakeService {
 
 	@Override
 	// 待优化
-	public List<String> encrypt(String privateKey, Integer companyId, String companyCode, String productCode,
+	public List<String> encrypt(String privateKey, Integer companyId, Integer productId,
 			String template, Integer num) {
 		 // 开始时间
         long start = System.currentTimeMillis();
@@ -86,9 +86,9 @@ public class AntifakeServiceImpl implements AntifakeService {
 
 		for (Integer i = 0; i < num; i++) {
 			// 递增
-			Long increment = redisTemplate.opsForValue().increment("" + companyCode + "_" + productCode, 1L);
+			Long increment = redisTemplate.opsForValue().increment("" + companyId + "_" + productId, 1L);
 			if (increment > 999999999) {
-				redisTemplate.opsForValue().set("" + companyCode + "_" + productCode, "1");
+				redisTemplate.opsForValue().set("" + companyId + "_" + productId, "1");
 			}
 			String get12uuid = UUIDUtil.get12UUID();
 			// 加密
@@ -105,10 +105,9 @@ public class AntifakeServiceImpl implements AntifakeService {
 				//String valid = Base64Utils.encodeToString(validByte);
 				String substringBegin = encrypt.substring(0, 10);
 				String substringLast = StringUtils.substring(encrypt, 10);
-				String stringCode = "" + companyCode + "." + productCode + "." + substringBegin + "." + increment;
+				String stringCode = "" + companyId + "." + productId + "." + substringBegin + "." + increment;
 				cipher.setCompanyId(companyId);
-				cipher.setCompanyCode(companyCode);
-				cipher.setProductCode(productCode);
+				cipher.setProductId(productId);
 				cipher.setCipherText(substringLast);
 				cipher.setBatch(batch);
 				cipher.setCode("" + increment);
@@ -131,7 +130,7 @@ public class AntifakeServiceImpl implements AntifakeService {
 	
 	@Override
 	// 待优化
-	public List<String> encrypt2(String privateKey, Integer companyId, String companyCode, String productCode,
+	public List<String> encrypt2(String privateKey, Integer companyId, Integer productId,
 			String template, Integer num) {
 		
 		 // 开始时间
@@ -149,9 +148,9 @@ public class AntifakeServiceImpl implements AntifakeService {
 
 		for (Integer i = 0; i < num; i++) {
 			// 递增
-			Long increment = redisTemplate.opsForValue().increment("" + companyCode + "_" + productCode, 1L);
+			Long increment = redisTemplate.opsForValue().increment("" + companyId + "_" + productId, 1L);
 			if (increment > 999999999) {
-				redisTemplate.opsForValue().set("" + companyCode + "_" + productCode, "1");
+				redisTemplate.opsForValue().set("" + companyId + "_" + productId, "1");
 			}
 			String get12uuid = UUIDUtil.get12UUID();
 			// 加密
@@ -168,10 +167,9 @@ public class AntifakeServiceImpl implements AntifakeService {
 				String valid = Base64Utils.encodeToString(validByte);
 				String substringBegin = encrypt.substring(0, 10);
 				String substringLast = StringUtils.substring(encrypt, 10);
-				String stringCode = "" + companyCode + "." + productCode + "." + substringBegin + "." + increment;
+				String stringCode = "" + companyId + "." + productId + "." + substringBegin + "." + increment;
 				cipher.setCompanyId(companyId);
-				cipher.setCompanyCode(companyCode);
-				cipher.setProductCode(productCode);
+				cipher.setProductId(productId);
 				cipher.setCipherText(substringLast);
 				cipher.setBatch(batch);
 				cipher.setCode("" + increment);
@@ -193,13 +191,13 @@ public class AntifakeServiceImpl implements AntifakeService {
 	public Map<String, Object> checkCode(String codeString, String type) throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
 		String[] split = StringUtils.split(codeString, ".");
-		String companyCode = split[0];
-		String productCode = split[1];
+		String companyId = split[0];
+		String productId = split[1];
 		String cipherText = split[2];
 		String increment = split[3];
 		Cipher cipher = new Cipher();
-		cipher.setCompanyCode(companyCode);
-		cipher.setProductCode(productCode);
+		cipher.setCompanyId(Integer.parseInt(companyId));
+		cipher.setProductId(Integer.parseInt(productId));
 		cipher.setCode(increment);
 		Cipher resultCipher = cipherMapper.queryCipher(cipher);
 		Expre resultCheck = expreMapper.queryExpreByCId(resultCipher.getCompanyId(), resultCipher.getBatch());

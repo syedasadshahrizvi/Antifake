@@ -138,7 +138,7 @@ public class UserController {
 	 * @author JZR
 	 * @date 2018年4月10日
 	 */
-	@PostMapping("/pwd/login")
+	/*@PostMapping("/pwd/login")
 	public ResultVO<UserVO> pwdLogin(@RequestBody UserLoginForm userLoginForm,
 			HttpServletRequest request, HttpServletResponse response) {
 		User user = new User();
@@ -158,7 +158,34 @@ public class UserController {
 		}
 		return ResultVOUtil.success(userVO);
 	}
-
+*?/
+/**
+	 * <p>
+	 * Description: 密码登陆
+	 * </p >
+	 * 
+	 * @author JZR
+	 * @date 2018年4月10日
+	 */
+	@PostMapping("/pwd/login")
+	public ResultVO<UserVO> pwdLogin(@RequestBody UserLoginForm userLoginForm,
+			HttpServletRequest request, HttpServletResponse response) {
+		log.error("【登陆】用户名："+userLoginForm.getUsername()+"密码："+userLoginForm.getPassword());
+		//System.out.println(userLoginForm.getUsername()+"  "+userLoginForm.getPassword());
+		User user = new User();
+		user.setUsername(userLoginForm.getUsername());
+		user.setPassword(userLoginForm.getPassword());
+		UserVO userVO = userService.loginByUsernameOrtelPhone(user);
+		// 添加token
+		String get32uuid = UUIDUtil.get32UUID();
+			response.setHeader(r_token, get32uuid);
+			Cookie cookie = new Cookie(u_token, get32uuid);
+			cookie.setMaxAge(30 * 24 * 60 * 60);// 设置为30天
+			cookie.setPath("/");
+			response.addCookie(cookie);
+		redisTemplate.opsForValue().set(get32uuid, userVO.getUserId(), 30, TimeUnit.DAYS);
+		return ResultVOUtil.success(userVO);
+	}
 	/**
 	 * <p>
 	 * Description: 验证码登陆

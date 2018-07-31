@@ -8,11 +8,10 @@ public static Antifake converte(AntifakeForm antifakeForm) {
 		
 		Antifake antifake = new Antifake();
 		
-		antifake.setCompanyCode(antifakeForm.getCompanyCode());
 		antifake.setCompanyId(antifakeForm.getCompanyId());
 		antifake.setCount(antifakeForm.getCount());
 		antifake.setPrivateKey(antifakeForm.getPrivateKey());
-		antifake.setProductCode(antifakeForm.getProductCode());
+		antifake.setProductId(antifakeForm.getProductId());
 		antifake.setTemplate(antifakeForm.getTemplate());
 		antifake.setCipherId(antifakeForm.getCipherId());
 		antifake.setStatus(antifakeForm.getStatus());

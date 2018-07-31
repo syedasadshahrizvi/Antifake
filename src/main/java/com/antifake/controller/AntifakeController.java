@@ -23,6 +23,7 @@ import com.antifake.converter.CompanyForm2CompanyModelConverter;
 import com.antifake.enums.ResultEnum;
 import com.antifake.exception.AntiFakeException;
 import com.antifake.form.AntifakeForm;
+import com.antifake.form.CheckedForm;
 import com.antifake.form.CompanyForm;
 import com.antifake.model.Antifake;
 import com.antifake.model.Cipher;
@@ -51,13 +52,13 @@ public class AntifakeController {
 	 */
 	@PostMapping("/create")
 	public ResultVO<List<String>> createCipher(@RequestBody AntifakeForm antifakeFrom) {
-		List<String> list = antifakeService.encrypt(antifakeFrom.getPrivateKey(), antifakeFrom.getCompanyId(), antifakeFrom.getCompanyCode(), antifakeFrom.getProductCode(), antifakeFrom.getTemplate(), antifakeFrom.getCount());
+		List<String> list = antifakeService.encrypt(antifakeFrom.getPrivateKey(), antifakeFrom.getCompanyId(), antifakeFrom.getProductId(), antifakeFrom.getTemplate() , antifakeFrom.getCount());
 		return ResultVOUtil.success(list);
 	}
 	
 	@PostMapping("/create2")
 	public ResultVO<List<String>> createCipher2(@RequestBody AntifakeForm antifakeFrom) {
-		List<String> list = antifakeService.encrypt2(antifakeFrom.getPrivateKey(), antifakeFrom.getCompanyId(), antifakeFrom.getCompanyCode(), antifakeFrom.getProductCode(), antifakeFrom.getTemplate(), antifakeFrom.getCount());
+		List<String> list = antifakeService.encrypt2(antifakeFrom.getPrivateKey(), antifakeFrom.getCompanyId(), antifakeFrom.getProductId(), antifakeFrom.getTemplate(), antifakeFrom.getCount());
 		return ResultVOUtil.success(list);
 	}
 
@@ -69,12 +70,19 @@ public class AntifakeController {
 	 * @author JZR
 	 * @date 2018年5月7日
 	 */
-	@GetMapping("/checked/{codeString}/{type}")
+	/*@GetMapping("/checked/{codeString}/{type}")
 	public ResultVO<Map<String, Object>> checkCipher(@PathVariable("codeString") String codeString,
 			@PathVariable(name = "type") String type) throws Exception {
 		Map<String, Object> resultMap = antifakeService.checkCode(codeString, type);
 		return ResultVOUtil.success(resultMap);
+	}*/
+	
+	@PostMapping("/checked")
+	public ResultVO<Map<String, Object>> checkCipher(@RequestBody CheckedForm checkedForm) throws Exception {
+		Map<String, Object> resultMap = antifakeService.checkCode(checkedForm.getCodeString(), checkedForm.getType());
+		return ResultVOUtil.success(resultMap);
 	}
+	
 
 	/**
 	 * <p>

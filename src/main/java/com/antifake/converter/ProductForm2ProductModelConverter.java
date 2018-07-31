@@ -13,8 +13,6 @@ public static Product converte(ProductForm productForm) {
 		
 		
 		product.setCompanyId(productForm.getCompanyId());
-		product.setCompanyCode(productForm.getCompanyCode());
-		product.setProductCode(productForm.getProductCode());
 		product.setTemplate(productForm.getTemplate());
 		product.setProductTitle(productForm.getProductTitle());
 		

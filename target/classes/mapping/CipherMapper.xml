@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.antifake.model.Cipher" >
     <id column="cipher_id" property="cipherId" jdbcType="INTEGER" />
     <id column="company_id" property="companyId" jdbcType="INTEGER" />
-    <result column="company_code" property="companyCode" jdbcType="VARCHAR" />
-    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+ 
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="cipher_text" property="cipherText" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="count" property="count" jdbcType="VARCHAR" />
@@ -17,19 +17,18 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    cipher_id,company_id,company_code, product_code, cipher_text, code,count,
+    cipher_id,company_id, product_id, cipher_text, code,count,
     batch,valid,create_time,query_time,ascend
   </sql>
   
   <insert id="insertList" parameterType="java.util.ArrayList" >
     insert into antifake_cipher
-		(company_id,company_code,product_code,cipher_text,code,batch,valid)  
+		(company_id,product_id,cipher_text,code,batch,valid)  
 		values   
 		<foreach item="cipher" collection="listCipher"  separator="," >  
 		(  
 		#{cipher.companyId,jdbcType=VARCHAR},
-		#{cipher.companyCode,jdbcType=VARCHAR},  
-		#{cipher.productCode,jdbcType=VARCHAR},
+		#{cipher.productId,jdbcType=VARCHAR},
 		#{cipher.cipherText,jdbcType=VARCHAR},
 		#{cipher.code,jdbcType=VARCHAR},
 		#{cipher.batch,jdbcType=VARCHAR},
@@ -41,7 +40,7 @@
     select 
     <include refid="Base_Column_List" />
     from antifake_cipher
-    where company_code = #{cipher.companyCode,jdbcType=VARCHAR} and product_code = #{cipher.productCode,jdbcType=VARCHAR} and code = #{cipher.code,jdbcType=VARCHAR}
+    where company_id = #{cipher.companyId,jdbcType=INTEGER} and product_id = #{cipher.productId,jdbcType=INTEGER} and code = #{cipher.code,jdbcType=VARCHAR}
   </select>
   <update id="updateCount" parameterType="com.antifake.model.Cipher">
   	update antifake_cipher set count = #{cipher.count,jdbcType=VARCHAR} where company_code = #{cipher.companyCode,jdbcType=VARCHAR} and product_code = #{cipher.productCode,jdbcType=VARCHAR} and code = #{cipher.code,jdbcType=VARCHAR}
@@ -63,11 +62,9 @@
     	<if test="antifake.companyId != null">
     		and company_id = #{antifake.companyId}
     	</if>
-    	<if test="antifake.companyCode != null">
-    		and company_code = #{antifake.companyCode}
-    	</if>
-    	<if test="antifake.productCode != null ">
-    		and product_code = #{antifake.productCode}
+    	
+    	<if test="antifake.productId != null ">
+    		and product_id = #{antifake.productId}
     	</if>
     	<if test="antifake.batch != null">
     		and batch = #{antifake.batch}

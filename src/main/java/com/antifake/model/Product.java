@@ -6,9 +6,7 @@ public class Product {
 	
 	private Integer companyId;
 	
-	private String companyCode;
 	
-	private String productCode;
 	private String productTitle;
 	
 	private String template;
@@ -29,15 +27,6 @@ public class Product {
 		this.companyId = companyId;
 	}
 
-	public String getCompanyCode() {
-		return companyCode;
-	}
-
-	public void setCompanyCode(String companyCode) {
-		this.companyCode = companyCode;
-	}
-	
-	
 	
 	public String getProductTitle() {
 		return productTitle;
@@ -49,15 +38,6 @@ public class Product {
 	
 	
 	
-	
-
-	public String getProductCode() {
-		return productCode;
-	}
-
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
-	}
 
 	public String getTemplate() {
 		return template;
@@ -69,8 +49,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [productId=" + productId + ", companyId=" + companyId + ", companyCode=" + companyCode
-				+ ", productCode=" + productCode + ", template=" + template + "]";
+		return "Product [productId=" + productId + ", companyId=" + companyId +  ", template=" + template + "]";
 	}
 
 }

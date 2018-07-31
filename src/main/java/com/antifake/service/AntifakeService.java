@@ -14,9 +14,9 @@ public interface AntifakeService {
 	  * @author JZR  
 	  * @date 2018年4月18日
 	  */
-	List<String> encrypt(String privateKey,Integer companyId, String companyCode, String productCode, String template, Integer count);
+	List<String> encrypt(String privateKey,Integer companyId, Integer productId, String template, Integer count);
 	
-	List<String> encrypt2(String privateKey,Integer companyId, String companyCode, String productCode, String template, Integer count);
+	List<String> encrypt2(String privateKey,Integer companyId, Integer productId, String template, Integer count);
 
 	/**
 	  * <p>Description: 解密</p>

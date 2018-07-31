@@ -8,12 +8,9 @@ public class Cipher {
 	
 	/**	公司主键*/
 	private Integer companyId;
+
 	
-	/**	公司编号*/
-	private String companyCode;
-	
-	/**	产品编号*/
-	private String productCode;
+	private Integer productId;
 	
 	/**	密文*/
 	private String cipherText;
@@ -55,20 +52,13 @@ public class Cipher {
 		this.companyId = companyId;
 	}
 
-	public String getCompanyCode() {
-		return companyCode;
+	
+	public Integer getProductId() {
+		return productId;
 	}
 
-	public void setCompanyCode(String companyCode) {
-		this.companyCode = companyCode;
-	}
-
-	public String getProductCode() {
-		return productCode;
-	}
-
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setProductId(Integer productId) {
+		this.productId = productId;
 	}
 
 	public String getCipherText() {
@@ -137,8 +127,8 @@ public class Cipher {
 
 	@Override
 	public String toString() {
-		return "Cipher [cipherId=" + cipherId + ", companyId=" + companyId + ", companyCode=" + companyCode
-				+ ", productCode=" + productCode + ", cipherText=" + cipherText + ", code=" + code + ", count=" + count
+		return "Cipher [cipherId=" + cipherId + ", companyId=" + companyId + 
+				 ", productId=" + productId + ", cipherText=" + cipherText + ", code=" + code + ", count=" + count
 				+ ", batch=" + batch + ", valid=" + valid + ", createTime=" + createTime + ", queryTime=" + queryTime
 				+ ", ascend=" + ascend + "]";
 	}

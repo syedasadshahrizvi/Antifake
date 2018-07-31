@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 		return resultMap;
 	}
 
-	@Override
+	/*@Override
 	public UserVO loginByUsernameOrtelPhone(User userconvert) {
 
 		// 正则匹配手机号
@@ -92,6 +92,28 @@ public class UserServiceImpl implements UserService {
 			userVO.setRoleList(user.getRoleList());
 		}
 
+		return userVO;
+	}*/
+	
+	@Override
+	public UserVO loginByUsernameOrtelPhone(User userconvert) {
+
+		// 正则匹配手机号
+		UserVO userVO = new UserVO();
+		if (RegExUtils.isPhone(userconvert.getUsername())) {
+			userconvert.setTelphone(userconvert.getUsername());
+			userconvert.setUsername(null);
+		}
+		User user = userMapper.queryUserByUsernameOrTelphone(userconvert);
+		if(user==null || !MD5Utils.hash(userconvert.getPassword()).equals(user.getPassword())) {
+			throw new AntiFakeException(ResultEnum.LOGIN_ERROE);
+		}
+		userVO.setUserId(user.getUserId());
+		userVO.setNickname(user.getNickname());
+		userVO.setTelphone(user.getTelphone());
+		userVO.setUsername(user.getUsername());
+		userVO.setStatus(user.getStatus());
+		userVO.setRoleList(user.getRoleList());
 		return userVO;
 	}
 
