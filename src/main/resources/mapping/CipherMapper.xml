@@ -73,10 +73,10 @@
     
   </select>
   
-  <select id="getCount">
+  <select id="getCount" resultType="integer">
   	select count(cipher_id) from antifake_cipher where batch = #{batch}
   </select>
-  <select id="getUseCount">
+  <select id="getUseCount" resultType="integer" >
   	select count(cipher_id) from antifake_cipher where batch = #{batch} and count != 0
   </select>
   

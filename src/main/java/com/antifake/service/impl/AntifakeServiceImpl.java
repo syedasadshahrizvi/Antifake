@@ -1,5 +1,9 @@
 package com.antifake.service.impl;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.jce.interfaces.ECPublicKey;
 import org.bouncycastle.jce.interfaces.ECPrivateKey;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
 import org.springframework.beans.BeanUtils;
@@ -35,6 +40,7 @@ import com.antifake.model.Expre;
 import com.antifake.model.PubKey;
 import com.antifake.service.AntifakeService;
 import com.antifake.utils.ECCUtil;
+import com.antifake.utils.ECCUtil2;
 import com.antifake.utils.MD5Utils;
 import com.antifake.utils.UUIDUtil;
 
@@ -69,6 +75,7 @@ public class AntifakeServiceImpl implements AntifakeService {
 
 	@Override
 	// 待优化
+	//private key is the short key given to client
 	public List<String> encrypt(String privateKey, Integer companyId, Integer productId,
 			String template, Integer num) {
 		 // 开始时间
@@ -94,6 +101,8 @@ public class AntifakeServiceImpl implements AntifakeService {
 			// 加密
 			try {
 				Cipher cipher = new Cipher();
+				//Get MD5 and append uuid
+				
 				String templates = expreMD5 + "." + get12uuid;
 				// 获取私钥
 				ECPublicKey publicKey = ECCUtil.string2PublicKey(privateKey);
@@ -127,6 +136,9 @@ public class AntifakeServiceImpl implements AntifakeService {
 		System.err.println("存储耗时 ：" + (System.currentTimeMillis() - start2) + "毫秒");
 		return listString;
 	}
+	
+	
+	
 	
 	@Override
 	// 待优化
@@ -223,7 +235,7 @@ public class AntifakeServiceImpl implements AntifakeService {
 		for (CompanyPubKey pubKey : userKeyList) {
 			try {
 				String publicKey = pubKey.getPublicKey();
-				ECPrivateKey privateKey = ECCUtil.string2PrivateKey(publicKey);
+				ECPrivateKey privateKey = (ECPrivateKey) ECCUtil.string2PrivateKey(publicKey);
 				decrypt = ECCUtil.privateDecrypt(cipherBytes, privateKey);
 				byte[] validByte2 = ECCUtil.privateDecrypt(validByte, privateKey);
 				valid = new String(validByte2);
@@ -420,7 +432,7 @@ public class AntifakeServiceImpl implements AntifakeService {
 				for (CompanyPubKey pubKey : userKeyList) {
 					try {
 						String publicKey = pubKey.getPublicKey();
-						ECPrivateKey privateKey = ECCUtil.string2PrivateKey(publicKey);
+						ECPrivateKey privateKey = (ECPrivateKey) ECCUtil.string2PrivateKey(publicKey);
 						byte[] privateDecrypt = ECCUtil.privateDecrypt(validByte, privateKey);
 						String valid = new String(privateDecrypt);
 						cipher.setValid(valid);

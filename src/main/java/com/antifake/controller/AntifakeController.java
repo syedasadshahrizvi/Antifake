@@ -29,6 +29,7 @@ import com.antifake.model.Antifake;
 import com.antifake.model.Cipher;
 import com.antifake.model.Company;
 import com.antifake.service.AntifakeService;
+import com.antifake.service.AntifakeService2;
 import com.antifake.utils.ResultVOUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,9 @@ public class AntifakeController {
 
 	@Autowired
 	private AntifakeService antifakeService;
+	@Autowired
+	private AntifakeService2 antifakeService2;
+
 
 	/**
 	 * <p>
@@ -62,6 +66,24 @@ public class AntifakeController {
 		return ResultVOUtil.success(list);
 	}
 
+	
+	
+	@PostMapping("/sign")
+	public ResultVO<Boolean> signCipher(@RequestBody AntifakeForm antifakeFrom) throws Exception {
+	List<String> sign = antifakeService2.sign(antifakeFrom.getPrivateKey(), antifakeFrom.getCompanyId(), antifakeFrom.getProductId(), antifakeFrom.getTemplate() );
+	//System.out.println(sign);
+		return ResultVOUtil.success(sign);
+	}
+	
+	@PostMapping("/verify")
+	public ResultVO<Boolean> verifyCipher(@RequestBody CheckedForm checkedForm) throws Exception {
+		
+		Map<String, Object> resultMap= antifakeService2.verify(checkedForm.getCodeString(),  checkedForm.getType());
+	
+		return ResultVOUtil.success(resultMap);
+	}
+	
+	
 	/**
 	 * <p>
 	 * Description: 校验防伪码

@@ -1,8 +1,3 @@
-server:
-  port: 8080
-  servlet:
-    context-path: /antifake
-  
 
 spring:
   servlet:
@@ -34,7 +29,7 @@ spring:
      host: www.mlnode.com
      database: 0
      password: 
-     port: 3306
+     port: 6379
      timeout: 30000 
 mybatis:
   mapper-locations: classpath:mapping/*.xml

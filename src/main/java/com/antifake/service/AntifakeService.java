@@ -17,6 +17,8 @@ public interface AntifakeService {
 	List<String> encrypt(String privateKey,Integer companyId, Integer productId, String template, Integer count);
 	
 	List<String> encrypt2(String privateKey,Integer companyId, Integer productId, String template, Integer count);
+	
+	
 
 	/**
 	  * <p>Description: 解密</p>

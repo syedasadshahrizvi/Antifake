@@ -18,6 +18,10 @@ public class AntifakeForm {
 	private Integer count; //生成数量
 	
 	private Integer cipherId;
+
+	private String signature;
+	
+	private String publicKey;
 	
 	private String status; 
 	
@@ -25,7 +29,7 @@ public class AntifakeForm {
 	
 	private String end;
 	
-	
+
 	private String batch;
 	
 }

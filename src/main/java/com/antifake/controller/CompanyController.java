@@ -140,7 +140,7 @@ public class CompanyController {
 		Company company = companyService.updateCompany(converteCompany);
 		Map<String,Object> resultMap = new HashMap<>();
 		resultMap.put("company", company);
-		return ResultVOUtil.success(resultMap);
+		return ResultVOUtil.success();
 	}
 	
 	/**
