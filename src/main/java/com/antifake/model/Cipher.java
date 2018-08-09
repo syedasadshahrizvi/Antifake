@@ -35,6 +35,8 @@ public class Cipher {
 	
 	/**	追溯预留*/
 	private String	ascend;
+	
+	private String	ranKey;
 
 	public Integer getCipherId() {
 		return cipherId;
@@ -124,13 +126,22 @@ public class Cipher {
 	public void setAscend(String ascend) {
 		this.ascend = ascend;
 	}
+	
+	public String getRanKey() {
+		return ranKey;
+	}
+
+	public void setRanKey(String rankey) {
+		this.ranKey = rankey;
+		//System.out.println(this.uuid);
+	}
 
 	@Override
 	public String toString() {
 		return "Cipher [cipherId=" + cipherId + ", companyId=" + companyId + 
 				 ", productId=" + productId + ", cipherText=" + cipherText + ", code=" + code + ", count=" + count
 				+ ", batch=" + batch + ", valid=" + valid + ", createTime=" + createTime + ", queryTime=" + queryTime
-				+ ", ascend=" + ascend + "]";
+				+ ", ascend=" + ascend +", ranKey=" + ranKey + "]";
 	}
 	
 	

@@ -6,7 +6,7 @@
     <result column="company_id" property="companyId" jdbcType="INTEGER" />
     <result column="product_expre" property="productExpre" jdbcType="VARCHAR" />
     <result column="batch" property="batch" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   
   <sql id="Base_Column_List" >

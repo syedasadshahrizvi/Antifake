@@ -106,7 +106,9 @@ public class AntifakeService2Impl implements AntifakeService2 {
 		cipher.setProductId(productId);
 		cipher.setCipherText(substringLast);
 		cipher.setBatch(batch);
-		cipher.setValid(get12uuid);
+		cipher.setRanKey(get12uuid);
+		
+		
 		cipher.setCode("" + increment);
 			
 		listCipher.add(cipher);
@@ -124,6 +126,8 @@ public class AntifakeService2Impl implements AntifakeService2 {
 		long start2 = System.currentTimeMillis();
 		cipherMapper.insertList(listCipher);
 		System.err.println("存储耗时 ：" + (System.currentTimeMillis() - start2) + "毫秒");
+		
+		
 		return stringCode;
     	
     	
@@ -169,7 +173,7 @@ public class AntifakeService2Impl implements AntifakeService2 {
 			try {
 				String publicKey = pubKey.getPublicKey();
 				System.out.println(publicKey);
-				bool= ECCUtil2.verify(resultCheck.getProductExpre()+"."+ resultCipher.getValid(),cipherText,publicKey);
+				bool= ECCUtil2.verify(resultCheck.getProductExpre()+"."+ resultCipher.getRanKey(),cipherText,publicKey);
 				if(bool== true)
 				{
 				decrypt= resultCheck.getProductExpre();
