@@ -1,6 +1,10 @@
 package com.antifake.form;
 
 
+
+
+import java.sql.Timestamp;
+
 import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
@@ -24,4 +28,6 @@ public class CompanyForm {
 	private Byte level;
 	
 	private String BusinessLicense;
+	
+	private String createTime;
 }

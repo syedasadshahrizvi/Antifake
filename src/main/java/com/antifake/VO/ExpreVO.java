@@ -28,5 +28,5 @@ public class ExpreVO {
 	private Integer use;
 	
 	/**	创建时间*/
-	private Date createTime;
+	private String createTime;
 }

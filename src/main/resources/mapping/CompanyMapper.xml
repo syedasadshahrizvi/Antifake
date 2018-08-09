@@ -10,9 +10,10 @@
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="business_license" property="businessLicense" jdbcType="VARCHAR" />
     <result column="company_code" property="companyCode" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    company_id,user_id ,company_name,register_id, level, status, business_license,company_code
+    company_id,user_id ,company_name,register_id, level, status, business_license,company_code,create_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 

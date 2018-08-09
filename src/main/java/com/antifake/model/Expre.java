@@ -1,6 +1,8 @@
 package com.antifake.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class Expre {
 	
@@ -16,7 +18,7 @@ public class Expre {
 	private String batch;
 	
 	/**	创建时间*/
-	private Date createTime;
+	private String createTime;
 
 	public Integer getExpreId() {
 		return expreId;
@@ -50,12 +52,16 @@ public class Expre {
 		this.batch = batch;
 	}
 
-	public Date getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
+	public void setCreateTime(Timestamp date) {
+	
+		Date dates = new Date(date.getTime());
+		String timeStamp = new SimpleDateFormat("yyyy.MM.dd-HH.mm").format(dates);
+		this.createTime = timeStamp;
+		
 	}
 
 	@Override

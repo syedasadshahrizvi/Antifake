@@ -70,7 +70,7 @@ public class AntifakeController {
 	
 	@PostMapping("/sign")
 	public ResultVO<Boolean> signCipher(@RequestBody AntifakeForm antifakeFrom) throws Exception {
-	List<String> sign = antifakeService2.sign(antifakeFrom.getPrivateKey(), antifakeFrom.getCompanyId(), antifakeFrom.getProductId(), antifakeFrom.getTemplate() );
+	String sign = antifakeService2.sign(antifakeFrom.getPrivateKey(), antifakeFrom.getCompanyId(), antifakeFrom.getProductId(), antifakeFrom.getTemplate() );
 	//System.out.println(sign);
 		return ResultVOUtil.success(sign);
 	}
@@ -212,7 +212,7 @@ public class AntifakeController {
 		Antifake converteAntifake = AntifakeForm2AntifakeModelConverter.converte(antifakeForm);
 		
 		
-		List<Cipher> cipherList = antifakeService.listCipher(converteAntifake,orderBy,pageNum,pageSize);
+		List<Cipher> cipherList = antifakeService2.listCipher(converteAntifake,orderBy,pageNum,pageSize);
 		return ResultVOUtil.success(cipherList);
 	}
 	

@@ -19,6 +19,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import com.alibaba.druid.util.HexBin;
 import com.antifake.mapper.ExpreMapper;
@@ -28,6 +29,7 @@ import com.antifake.exception.AntiFakeException;
 import com.antifake.mapper.CipherMapper;
 import com.antifake.mapper.CompanyMapper;
 import com.antifake.mapper.CompanyPubKeyRepository;
+import com.antifake.model.Antifake;
 import com.antifake.model.Cipher;
 import com.antifake.model.Company;
 import com.antifake.model.CompanyPubKey;
@@ -66,12 +68,12 @@ public class AntifakeService2Impl implements AntifakeService2 {
 	
 	@Override
 	// 待优化
-	public List<String> sign(String privateKey, Integer companyId, Integer productId,
+	public String sign(String privateKey, Integer companyId, Integer productId,
 			String template) throws Exception {
 		  
 		
 		long start = System.currentTimeMillis();
-		List<String> listString = new ArrayList<String>();
+		
 		List<Cipher> listCipher = new ArrayList<Cipher>();
 			
 			
@@ -108,7 +110,8 @@ public class AntifakeService2Impl implements AntifakeService2 {
 		cipher.setCode("" + increment);
 			
 		listCipher.add(cipher);
-		listString.add(stringCode);
+		
+		
 		
 		
 		//String signature =util.sign(template, (ECPrivateKey) pair.getPrivate());
@@ -121,7 +124,7 @@ public class AntifakeService2Impl implements AntifakeService2 {
 		long start2 = System.currentTimeMillis();
 		cipherMapper.insertList(listCipher);
 		System.err.println("存储耗时 ：" + (System.currentTimeMillis() - start2) + "毫秒");
-		return listString;
+		return stringCode;
     	
     	
     	//Boolean bool= ECCUtil2.verify(template, signature, "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEibHtxDEbBrytInM7s6YZyHmOSeiK/GUpKB6JQRZotPZcnbtfgKQhLZsebaT7kWl1Pe6T5TCgSI32elW8HVycdw==");
@@ -207,4 +210,41 @@ public class AntifakeService2Impl implements AntifakeService2 {
 			//	return bool;
 		return resultMap;
 	}
+	
+	@Override
+	public List<Cipher> listCipher(Antifake antifake,String orderBy,Integer pageNum,Integer pageSize) throws Exception {
+		//antifake.setPageNum(antifake.getPageNum()* antifake.getPageSize());
+		pageNum = pageNum*pageSize;
+		List<Cipher> listCipher = cipherMapper.listCipher(antifake,orderBy,pageNum,pageSize);
+		
+		//获取公钥
+		// 查询公钥
+		Company company = companyMapper.selectByPrimaryKey(antifake.getCompanyId());
+		CompanyPubKey companyPubKey = new CompanyPubKey();
+		companyPubKey.setCompanyId((Integer)company.getCompanyId());
+		companyPubKey.setStatus(STATUS);
+		
+		Example<CompanyPubKey> example = Example.of(companyPubKey);
+		List<CompanyPubKey> userKeyList = companyPubKeyRepository.findAll(example);
+		/*if(listCipher.size()>0) {
+			for (Cipher cipher : listCipher) {
+				//byte[] validByte = Base64Utils.decodeFromString(cipher.getValid());
+				for (CompanyPubKey pubKey : userKeyList) {
+					try {
+						String publicKey = pubKey.getPublicKey();
+						ECPrivateKey privateKey = (ECPrivateKey) ECCUtil.string2PrivateKey(publicKey);
+						byte[] privateDecrypt = ECCUtil.privateDecrypt(validByte, privateKey);
+						String valid = new String(privateDecrypt);
+						cipher.setValid(valid);
+
+					} catch (Exception e) {
+						log.error("【解密操作】秘钥不匹配", e);
+					}
+				}
+				
+			}
+		}*/
+		return listCipher;
+	}
+	
 }

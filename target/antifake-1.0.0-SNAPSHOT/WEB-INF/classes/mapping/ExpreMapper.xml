@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.antifake.mapper.ExpreMapper" >
+  <resultMap id="BaseResultMap" type="com.antifake.model.Expre" >
+ 	<id column="expre_id" property="expreId" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="product_expre" property="productExpre" jdbcType="VARCHAR" />
+    <result column="batch" property="batch" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    expre_id,company_id, product_expre, batch, create_time
+  </sql>
+  
+  <insert id="insertExpre" parameterType="com.antifake.model.Expre" >
+    insert into antifake_expre
+		(company_id,product_expre,batch)  
+		values    
+		(  
+		#{expre.companyId,jdbcType=INTEGER},  
+		#{expre.productExpre,jdbcType=VARCHAR},
+		#{expre.batch,jdbcType=VARCHAR}
+		)  
+  </insert>
+   <select id="queryExpreByCId" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from antifake_expre
+    where company_id = #{companyId} and batch = #{batch}
+  </select>
+  <select id="queryExpreByCoId" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from antifake_expre
+    where company_id = #{companyId} limit #{pageNum} , #{pageSize}
+  </select>
+</mapper>

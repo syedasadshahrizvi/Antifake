@@ -1,5 +1,11 @@
 package com.antifake.model;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
+
 public class Company {
 	
     private Integer companyId;
@@ -19,6 +25,10 @@ public class Company {
     private String companyCode;
     
 
+    private String createTime;
+    
+    
+
     public String getCompanyCode() {
 		return companyCode;
 	}
@@ -26,6 +36,23 @@ public class Company {
 	public void setCompanyCode(String companyCode) {
 		this.companyCode = companyCode;
 	}
+	
+	 public String getCreateTime() {
+			return createTime;
+		}
+
+	
+		public void setCreateTime(Timestamp date) {
+			
+			Date dates = new Date(date.getTime());
+			
+			
+			String timeStamp = new SimpleDateFormat("yyyy.MM.dd-HH.mm").format(dates);
+			this.createTime=timeStamp;
+			//System.out.println("string"+ timeStamp);
+			//this.createDate.setTime( date.getTime());
+			
+		}
 	
 	public String getCompanyName() {
 		return companyName;

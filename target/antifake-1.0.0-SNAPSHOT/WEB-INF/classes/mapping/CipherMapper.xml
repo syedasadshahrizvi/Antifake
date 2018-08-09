@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.antifake.mapper.CipherMapper" >
+  <resultMap id="BaseResultMap" type="com.antifake.model.Cipher" >
+    <id column="cipher_id" property="cipherId" jdbcType="INTEGER" />
+    <id column="company_id" property="companyId" jdbcType="INTEGER" />
+ 
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="cipher_text" property="cipherText" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="count" property="count" jdbcType="VARCHAR" />
+    <result column="batch" property="batch" jdbcType="VARCHAR" />
+    <result column="valid" property="valid" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="query_time" property="queryTime" jdbcType="DATE" />
+    <result column="ascend" property="ascend" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    cipher_id,company_id, product_id, cipher_text, code,count,
+    batch,valid,create_time,query_time,ascend
+  </sql>
+  
+  <insert id="insertList" parameterType="java.util.ArrayList" >
+    insert into antifake_cipher
+		(company_id,product_id,cipher_text,code,batch,valid)  
+		values   
+		<foreach item="cipher" collection="listCipher"  separator="," >  
+		(  
+		#{cipher.companyId,jdbcType=VARCHAR},
+		#{cipher.productId,jdbcType=VARCHAR},
+		#{cipher.cipherText,jdbcType=VARCHAR},
+		#{cipher.code,jdbcType=VARCHAR},
+		#{cipher.batch,jdbcType=VARCHAR},
+		#{cipher.valid,jdbcType=VARCHAR}
+		)  
+		</foreach> 
+  </insert>
+   <select id="queryCipher" resultMap="BaseResultMap" parameterType="com.antifake.model.Cipher" >
+    select 
+    <include refid="Base_Column_List" />
+    from antifake_cipher
+    where company_id = #{cipher.companyId,jdbcType=INTEGER} and product_id = #{cipher.productId,jdbcType=INTEGER} and code = #{cipher.code,jdbcType=VARCHAR}
+  </select>
+  <update id="updateCount" parameterType="com.antifake.model.Cipher">
+  	update antifake_cipher set count = #{cipher.count,jdbcType=VARCHAR} where company_code = #{cipher.companyCode,jdbcType=VARCHAR} and product_code = #{cipher.productCode,jdbcType=VARCHAR} and code = #{cipher.code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateValid" parameterType="com.antifake.model.Cipher">
+  	update antifake_cipher set valid = #{cipher.valid,jdbcType=VARCHAR} where cipher_id = #{cipher.cipherId,jdbcType=INTEGER} and company_id = #{cipher.companyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateButchValid">
+  	update antifake_cipher set valid = #{cipher.valid,jdbcType=VARCHAR} where company_id = #{cipher.companyId,jdbcType=INTEGER} and batch = #{cipher.batch,jdbcType=VARCHAR}
+  </update>
+  <update id="updateValidByCode">
+  	update antifake_cipher set valid = #{valid,jdbcType=VARCHAR} where company_id = #{companyId,jdbcType=INTEGER} and code between #{begain} and #{end}
+  </update>
+  <select id="listCipher" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from antifake_cipher
+    <where>
+    	<if test="antifake.companyId != null">
+    		and company_id = #{antifake.companyId}
+    	</if>
+    	
+    	<if test="antifake.productId != null ">
+    		and product_id = #{antifake.productId}
+    	</if>
+    	<if test="antifake.batch != null">
+    		and batch = #{antifake.batch}
+    	</if>
+    </where>
+    
+  </select>
+  
+  <select id="getCount" resultType="integer">
+  	select count(cipher_id) from antifake_cipher where batch = #{batch}
+  </select>
+  <select id="getUseCount" resultType="integer" >
+  	select count(cipher_id) from antifake_cipher where batch = #{batch} and count != 0
+  </select>
+  
+</mapper>
