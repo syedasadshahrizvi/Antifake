@@ -39,7 +39,10 @@ public class ECCUtil2 {
 	 
 	 public static String sign(String template, String priStr) throws Exception {
 	    	
-	    	
+		// System.out.println("5bpiEyC5n8s291Kjou+PHnRTu3OQ1jiKFZKmDicjs+xJSsroOBO3fytu4zf77Wq3p3TIaIHCWfsXOVawCHPJBA==".length());
+		 
+		 
+	    	System.out.println(priStr.length());
     	 byte[] keyBytes = Base64Utils.decodeFromString(priStr);
          PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);  
          KeyFactory keyFactorys = KeyFactory.getInstance("EC");  
@@ -49,13 +52,21 @@ public class ECCUtil2 {
          
     	 PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(ecprivateKey.getEncoded());
     	 KeyFactory keyFactory = KeyFactory.getInstance("EC") ;
+    	
     	 PrivateKey privateKey = keyFactory.generatePrivate(pkcs8EncodedKeySpec) ;
     	 Signature signature = Signature.getInstance("SHA256withECDSA");
+    	 
+    	// System.out.println("sign"+signature.toString());
+    			 
     	 signature.initSign(privateKey);
+    	 System.out.println("privatekey length"+privateKey.toString().length());
     	 signature.update(template.getBytes("UTF-8"));
     	 byte []arr = signature.sign();
-    	 System.out.println(arr);
     	
+    	 
+    	 System.out.println(arr.toString().getBytes());
+    	 System.out.println("hexbin "+HexBin.encode(arr));
+    	 System.out.println("hexbin "+HexBin.encode(arr).length());
     	 return Base64.getEncoder().encodeToString(arr);
        // return Base64.getEncoder().encodeToString(signature);
     }

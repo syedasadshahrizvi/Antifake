@@ -98,6 +98,8 @@ public class AntifakeService2Impl implements AntifakeService2 {
 		
 
 		Cipher cipher = new Cipher();
+			System.out.println(signature);
+			System.out.println("length" + signature.length());
 			
 		String substringBegin = signature.substring(0, 10);
 		String substringLast = StringUtils.substring(signature, 10);
