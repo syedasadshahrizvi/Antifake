@@ -38,8 +38,7 @@ public class CompanyController {
 	
 	@Autowired
 	private CompanyService companyService;
-	
-	
+		
 	/**
 	 * <p>Description: 申请公司角色</p>
 	 * @author JZR  
@@ -62,8 +61,7 @@ public class CompanyController {
 	}
 	
 	
-	
-	
+
 	@GetMapping("/newCompanyKey/{id}")
 	public void newCompanyKey( @PathVariable(name= "id") int id, HttpServletResponse res ){
 		
@@ -83,8 +81,7 @@ public class CompanyController {
 		resultMap.put("PublicKey", map.get("1"));
 		
 		resultMap.put("CompanyId", id);
-	
-		
+			
 		try {
 			
 			companyService.saveCertificate(cer,id);

@@ -5,9 +5,9 @@ spring:
       max-file-size: 10MB
   datasource:
     name: test
-    url: jdbc:mysql://119.3.20.110:3306/antifake?useUnicode=true&characterEncoding=UTF-8
-    username: JZR
-    password: 123456
+    url: jdbc:mysql://192.168.1.10:3306/antifake?useUnicode=true&characterEncoding=UTF-8
+    username: mltech
+    password: Itelly0u
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver

@@ -14,17 +14,18 @@
     <result column="create_time" property="createTime" jdbcType="DATE" />
     <result column="query_time" property="queryTime" jdbcType="DATE" />
     <result column="ascend" property="ascend" jdbcType="VARCHAR" />
-    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+   <result column="ran_key" property="ranKey" jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
     cipher_id,company_id, product_id, cipher_text, code,count,
-    batch,valid,create_time,query_time,ascend,uuid
+    batch,valid,create_time,query_time,ascend,ran_key
   </sql>
+  
   
   <insert id="insertList" parameterType="java.util.ArrayList" >
     insert into antifake_cipher
-		(company_id,product_id,cipher_text,code,batch,valid,uuid)  
+		(company_id,product_id,cipher_text,code,batch,valid,ascend,ran_key)  
 		values   
 		<foreach item="cipher" collection="listCipher"  separator="," >  
 		(  
@@ -34,10 +35,12 @@
 		#{cipher.code,jdbcType=VARCHAR},
 		#{cipher.batch,jdbcType=VARCHAR},
 		#{cipher.valid,jdbcType=VARCHAR},
-		#{cipher.uuid,jdbcType=VARCHAR}
+		#{cipher.ascend,jdbcType=VARCHAR},
+		#{cipher.ranKey,jdbcType=VARCHAR}
 		)  
 		</foreach> 
   </insert>
+  
    <select id="queryCipher" resultMap="BaseResultMap" parameterType="com.antifake.model.Cipher" >
     select 
     <include refid="Base_Column_List" />
