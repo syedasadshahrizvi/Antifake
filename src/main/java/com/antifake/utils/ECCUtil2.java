@@ -42,7 +42,7 @@ public class ECCUtil2 {
 		// System.out.println("5bpiEyC5n8s291Kjou+PHnRTu3OQ1jiKFZKmDicjs+xJSsroOBO3fytu4zf77Wq3p3TIaIHCWfsXOVawCHPJBA==".length());
 		 
 		 
-	    	System.out.println(priStr.length());
+	     System.out.println(priStr.length());
     	 byte[] keyBytes = Base64Utils.decodeFromString(priStr);
          PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);  
          KeyFactory keyFactorys = KeyFactory.getInstance("EC");  

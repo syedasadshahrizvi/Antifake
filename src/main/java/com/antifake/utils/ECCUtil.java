@@ -54,15 +54,23 @@ public class ECCUtil {
       
     //获取公钥(Base64编码)  
     public static String getPublicKey(KeyPair keyPair){  
-        ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();  
-        byte[] bytes = publicKey.getEncoded();  
+    	//System.out.println("public key"+keyPair.getPublic());
+        ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic(); 
+        //System.out.println("public key EC"+publicKey);
+        byte[] bytes = publicKey.getEncoded(); 
+        //System.out.println("public key EC bytes"+bytes);
+        //System.out.println("public key EC base64"+Base64Utils.encodeToString(bytes));
         return Base64Utils.encodeToString(bytes);  
     }  
       
     //获取私钥(Base64编码)  
     public static String getPrivateKey(KeyPair keyPair) throws IOException{  
+    	//System.out.println("private key"+keyPair.getPrivate());
         ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();  
+        //System.out.println("private key EC"+privateKey);
         byte[] bytes = privateKey.getEncoded();  
+        //System.out.println("private key EC bytes"+bytes);
+        //System.out.println("private key EC base64"+Base64Utils.encodeToString(bytes));
         return Base64Utils.encodeToString(bytes);  
     }  
       
@@ -189,9 +197,11 @@ public class ECCUtil {
     
     public static void main(String[] args) throws Exception {  
     	
-    	KeyPair pair = generateKeyPair();
+    	KeyPair pair = getKeyPair();
+    	System.out.println( pair.getPrivate()); 
+    	System.out.println( pair.getPublic()); 
     	
-    	ECPrivateKey privateKey = (ECPrivateKey) pair.getPrivate();  
+    	/*ECPrivateKey privateKey = (ECPrivateKey) pair.getPrivate();  
         byte[] bytes1 = privateKey.getEncoded();  
         System.out.println( "private "+ Base64Utils.encodeToString(bytes1)); 
         
@@ -204,7 +214,7 @@ public class ECCUtil {
     	System.out.println("Signature correct: " + isCorrect);
     	
     	
-      /*  KeyPair keyPair = ECCUtil.getKeyPair();  
+        KeyPair keyPair = ECCUtil.getKeyPair();  
         String publicKeyStr = ECCUtil.getPublicKey(keyPair);  
         String privateKeyStr = ECCUtil.getPrivateKey(keyPair);  
         System.out.println("ECC公钥Base64编码:" + publicKeyStr);  

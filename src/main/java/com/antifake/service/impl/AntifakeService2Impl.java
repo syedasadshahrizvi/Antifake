@@ -72,6 +72,9 @@ public class AntifakeService2Impl implements AntifakeService2 {
 			String template) throws Exception {
 		  
 		
+		
+		System.out.println("pk length"+privateKey.length());
+		System.out.println("pk length"+privateKey);
 		long start = System.currentTimeMillis();
 		
 		List<Cipher> listCipher = new ArrayList<Cipher>();
