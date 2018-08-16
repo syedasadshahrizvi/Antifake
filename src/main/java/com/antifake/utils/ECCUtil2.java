@@ -59,16 +59,17 @@ public class ECCUtil2 {
     	// System.out.println("sign"+signature.toString());
     			 
     	 signature.initSign(privateKey);
-    	 System.out.println("privatekey length"+privateKey.toString().length());
+    	
     	 signature.update(template.getBytes("UTF-8"));
     	 byte []arr = signature.sign();
     	
     	 
-    	 System.out.println(arr.toString().getBytes());
-    	 System.out.println("hexbin "+HexBin.encode(arr));
-    	 System.out.println("hexbin "+HexBin.encode(arr).length());
+    	
+    	 //System.out.println("hexbin "+HexBin.encode(arr));
+    	 //System.out.println("hexbin "+HexBin.encode(arr).length());
+    	 System.out.println("base64"+ Base64.getEncoder().encodeToString(arr));
     	 return Base64.getEncoder().encodeToString(arr);
-       // return Base64.getEncoder().encodeToString(signature);
+    	 //return HexBin.encode(arr);
     }
 	    
 	  public static boolean verify(String template ,  String arr, String pubStr)  throws Exception {
@@ -86,9 +87,9 @@ public class ECCUtil2 {
 	    	 signature.initVerify(publicKey);
 	    	 
 	    	 signature.update(template.getBytes("UTF-8"));
-	    	 boolean bool = signature.verify(Base64.getDecoder().decode(arr));
+	    	boolean bool = signature.verify(Base64.getDecoder().decode(arr));
 	    	
-	    	// boolean bool = signature.verify(HexBin.decode(arr));
+	    	 //boolean bool = signature.verify(HexBin.decode(arr));
 	    	 System.out.println("jdk ecdsa verify:"+bool);
 	    	 return bool;
 	    } 

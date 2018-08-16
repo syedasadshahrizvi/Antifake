@@ -68,17 +68,14 @@ public class AntifakeService2Impl implements AntifakeService2 {
 	
 	@Override
 	// 待优化
-	public String sign(String privateKey, Integer companyId, Integer productId,
-			String template) throws Exception {
+	public List<String> sign(String privateKey, Integer companyId, Integer productId,
+			String template,Integer num) throws Exception {
 		  
 		
-		
-		System.out.println("pk length"+privateKey.length());
-		System.out.println("pk length"+privateKey);
 		long start = System.currentTimeMillis();
 		
 		List<Cipher> listCipher = new ArrayList<Cipher>();
-			
+		List<String> listString = new ArrayList<String>();	
 			
 		Expre expre = new Expre();
 		expre.setCompanyId(companyId);
@@ -87,43 +84,40 @@ public class AntifakeService2Impl implements AntifakeService2 {
 		expre.setBatch(batch);
 		expreMapper.insertExpre(expre);
 		
-	
-		String get12uuid = UUIDUtil.get12UUID();
+		for (Integer i = 0; i < num; i++) 
 		
-		String templates = template + "." + get12uuid;
-		System.out.println(templates);
-		String signature =ECCUtil2.sign(templates, privateKey);
-		
-		Long increment = redisTemplate.opsForValue().increment("" + companyId + "_" + productId, 1L);
-		if (increment > 999999999) {
-			redisTemplate.opsForValue().set("" + companyId + "_" + productId, "1");
-		}
-		
+		{
+			
+				Long increment = redisTemplate.opsForValue().increment("" + companyId + "_" + productId, 1L);
+				if (increment > 999999999) {
+					redisTemplate.opsForValue().set("" + companyId + "_" + productId, "1");
+				}
+				
+				String get12uuid = UUIDUtil.get12UUID();
+				String templates = template + "." + get12uuid;
+				String signature =ECCUtil2.sign(templates, privateKey);
+				
 
-		Cipher cipher = new Cipher();
-			System.out.println(signature);
-			System.out.println("length" + signature.length());
-			
-		String substringBegin = signature.substring(0, 10);
-		String substringLast = StringUtils.substring(signature, 10);
-		String stringCode = "" + companyId + "." + productId + "." + substringBegin + "." + increment ;
-		cipher.setCompanyId(companyId);
-		cipher.setProductId(productId);
-		cipher.setCipherText(substringLast);
-		cipher.setBatch(batch);
-		cipher.setRanKey(get12uuid);
+				Cipher cipher = new Cipher();
+				//System.out.println(signature);
+				//System.out.println("length" + signature.length());
+					
+				String substringBegin = signature.substring(0, 10);
+				String substringLast = StringUtils.substring(signature, 10);
+				String stringCode = "" + companyId + "." + productId + "." + substringBegin + "." + increment ;
+				cipher.setCompanyId(companyId);
+				cipher.setProductId(productId);
+				cipher.setCipherText(substringLast);
+				cipher.setBatch(batch);
+				cipher.setRanKey(get12uuid);
+				
+				
+				cipher.setCode("" + increment);
+					
+				listCipher.add(cipher);
+				listString.add(stringCode);
 		
-		
-		cipher.setCode("" + increment);
-			
-		listCipher.add(cipher);
-		
-		
-		
-		
-		//String signature =util.sign(template, (ECPrivateKey) pair.getPrivate());
-		System.out.println("originalbytes"+ signature);
-		
+		}
 		
 		long end = System.currentTimeMillis();
 		System.out.println("数据处理耗时："+(end-start));
@@ -133,7 +127,7 @@ public class AntifakeService2Impl implements AntifakeService2 {
 		System.err.println("存储耗时 ：" + (System.currentTimeMillis() - start2) + "毫秒");
 		
 		
-		return stringCode;
+		return listString;
     	
     	
     	//Boolean bool= ECCUtil2.verify(template, signature, "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEibHtxDEbBrytInM7s6YZyHmOSeiK/GUpKB6JQRZotPZcnbtfgKQhLZsebaT7kWl1Pe6T5TCgSI32elW8HVycdw==");
@@ -141,7 +135,39 @@ public class AntifakeService2Impl implements AntifakeService2 {
 		
 	}
 	
+	public void saveSign(Integer companyId, Integer productId,
+			String template,String signature) throws Exception
+	{
+		  
+		List<Cipher> listCipher = new ArrayList<Cipher>();
+		List<String> listString = new ArrayList<String>();	
+			
+		Expre expre = new Expre();
+		expre.setCompanyId(companyId);
+		expre.setProductExpre(template);
+		String batch = new SimpleDateFormat("yyMMddHHmmss").format(new Date());
+		expre.setBatch(batch);
+		expreMapper.insertExpre(expre);
+		
+		
+		Long increment = redisTemplate.opsForValue().increment("" + companyId + "_" + productId, 1L);
+		if (increment > 999999999)
+		{
+			redisTemplate.opsForValue().set("" + companyId + "_" + productId, "1");
+		}
+		
+		
+		Cipher cipher = new Cipher();
+		cipher.setCompanyId(companyId);
+		cipher.setProductId(productId);
+		cipher.setCipherText(signature);
+		cipher.setBatch(batch);
+		cipher.setCode("" + increment);	
+		listCipher.add(cipher);
+		cipherMapper.insertList(listCipher);
+		
 	
+	}
 	
 	
 	public Map<String, Object> verify(String codeString, String type) throws Exception {

@@ -123,11 +123,14 @@
 	</dependencies>
 
 	<build>
+	<finalName>antifake</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				
 			</plugin>
+			
 			<!-- docker远程部署 -->
 			<plugin>
                 <groupId>com.spotify</groupId>

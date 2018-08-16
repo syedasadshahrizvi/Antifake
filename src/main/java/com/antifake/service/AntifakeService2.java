@@ -9,9 +9,11 @@ import com.antifake.model.Cipher;
 public interface AntifakeService2 {
 
 	
-	String sign(String privateKey,Integer companyId, Integer productId, String template) throws Exception;
+	List<String> sign(String privateKey,Integer companyId, Integer productId, String template, Integer num) throws Exception;
 	
 	Map<String, Object> verify(String codeString, String type ) throws Exception;
 	
 	List<Cipher> listCipher(Antifake antifake,String orderBy,Integer pageNum,Integer pageSize) throws Exception;
+	
+	void saveSign(Integer companyId, Integer productId, String template, String signature) throws Exception;
 }

@@ -70,7 +70,7 @@ public class AntifakeController {
 	
 	@PostMapping("/sign")
 	public ResultVO<Boolean> signCipher(@RequestBody AntifakeForm antifakeFrom) throws Exception {
-	String sign = antifakeService2.sign(antifakeFrom.getPrivateKey(), antifakeFrom.getCompanyId(), antifakeFrom.getProductId(), antifakeFrom.getTemplate() );
+	List<String> sign = antifakeService2.sign(antifakeFrom.getPrivateKey(), antifakeFrom.getCompanyId(), antifakeFrom.getProductId(), antifakeFrom.getTemplate(),antifakeFrom.getCount() );
 	//System.out.println(sign);
 		return ResultVOUtil.success(sign);
 	}
@@ -81,6 +81,13 @@ public class AntifakeController {
 		Map<String, Object> resultMap= antifakeService2.verify(checkedForm.getCodeString(),  checkedForm.getType());
 	
 		return ResultVOUtil.success(resultMap);
+	}
+	
+	
+	@PostMapping("/saveSign")
+	public ResultVO<Boolean> saveCipher(@RequestBody AntifakeForm antifakeFrom) throws Exception {
+	antifakeService2.saveSign(antifakeFrom.getCompanyId(), antifakeFrom.getProductId(), antifakeFrom.getTemplate(),antifakeFrom.getSignature());
+		return ResultVOUtil.success();
 	}
 	
 	
