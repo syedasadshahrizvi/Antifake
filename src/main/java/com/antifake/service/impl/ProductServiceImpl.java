@@ -1,5 +1,6 @@
 package com.antifake.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.antifake.enums.ResultEnum;
 import com.antifake.exception.AntiFakeException;
+import com.antifake.form.ProductForm1;
 import com.antifake.mapper.CompanyMapper;
 import com.antifake.mapper.ProductMapper;
 import com.antifake.model.Company;
@@ -43,8 +45,31 @@ public class ProductServiceImpl implements ProductService{
 		return productMapper.queryByProductId(productId);
 	}
 
+
+
 	@Override
 	public List<Product> getProductList(Integer companyId) {
 		return productMapper.queryByCId(companyId);
 	}
+	
+	@Override
+	public List<ProductForm1> getProductList1(Integer companyId)
+	{
+		List<Product> p=productMapper.queryByCId(companyId);
+		List<ProductForm1> pf= new ArrayList<ProductForm1>();
+		
+		for(Product p1:p)
+		{
+			ProductForm1 pf1=new ProductForm1();
+			pf1.setProductId(p1.getProductId());
+			pf1.setProductTitle(p1.getProductTitle());
+			
+			pf.add(pf1);
+		}
+		
+		return pf;
+		
+	}
+	
+	
 }

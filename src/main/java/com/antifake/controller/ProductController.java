@@ -25,6 +25,7 @@ import com.antifake.enums.ResultEnum;
 import com.antifake.exception.AntiFakeException;
 import com.antifake.form.CompanyForm;
 import com.antifake.form.ProductForm;
+import com.antifake.form.ProductForm1;
 import com.antifake.model.Company;
 import com.antifake.model.Product;
 import com.antifake.service.ProductService;
@@ -80,6 +81,18 @@ public class ProductController {
 		return ResultVOUtil.success(productList);
 	}
 	
+	@GetMapping("/getlist1/{companyId}")
+	public ResultVO<List<Product>> listProduct1(@PathVariable("companyId")Integer companyId){
+		List<ProductForm1> productList = productService.getProductList1(companyId);
+		
+		
+		
+		return ResultVOUtil.success(productList);
+	}
+	
+	
+	
+	
 	/**
 	  * <p>Description: 获取商品模板</p> 
 	  * @author JZR  
@@ -89,6 +102,16 @@ public class ProductController {
 	public ResultVO<Product> getProduct(@PathVariable("productId")Integer productId){
 		Product product = productService.getProductBypId(productId);
 		return ResultVOUtil.success(product);
+	}
+	@GetMapping("/getdetails/{productId}")
+	public ResultVO<Product> getProductDretails(@PathVariable("productId")Integer productId){
+		Product product = productService.getProductBypId(productId);
+		
+		Map m= new HashMap<String,Object>();
+		m.put("productId", product.getProductId());
+		m.put("template", product.getTemplate());
+		
+		return ResultVOUtil.success(m);
 	}
 	
 }

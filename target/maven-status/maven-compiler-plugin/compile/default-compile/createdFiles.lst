@@ -21,6 +21,7 @@ com\antifake\mapper\PubKeyMapper.class
 com\antifake\form\UserRegistForm.class
 com\antifake\controller\UserController.class
 com\antifake\controller\ProductController.class
+com\antifake\form\ProductForm1.class
 com\antifake\mapper\ProductMapper.class
 com\antifake\mapper\PubKeyRepository.class
 com\antifake\model\CompanyPubKey.class

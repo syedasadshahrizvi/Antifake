@@ -7,8 +7,14 @@
       <result column="product_title" property="productTitle" jdbcType="VARCHAR" />
     <result column="template" property="template" jdbcType="VARCHAR" />
   </resultMap>
+ 
+  
+  
   <sql id="Base_Column_List" >
     product_id, company_id,product_title, template
+  </sql>
+  <sql id="Base_Column_List1" >
+    product_id, product_title
   </sql>
   <insert id="createProduct" parameterType="com.antifake.model.Product" >
     insert into company_product (company_id,template,product_title
@@ -23,4 +29,6 @@
   <select id="queryByCId" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"></include> from company_product where company_id = #{companyId}
   </select>
+  
+   
 </mapper>
