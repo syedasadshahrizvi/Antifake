@@ -224,6 +224,7 @@ public class AntifakeServiceImpl implements AntifakeService {
 		Example<CompanyPubKey> example = Example.of(companyPubKey);
 		List<CompanyPubKey> userKeyList = companyPubKeyRepository.findAll(example);
 		
+		
 		// 完整密文
 
 		cipherText = cipherText + resultCipher.getCipherText();

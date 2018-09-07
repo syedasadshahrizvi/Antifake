@@ -54,12 +54,8 @@ public class ECCUtil {
       
     //获取公钥(Base64编码)  
     public static String getPublicKey(KeyPair keyPair){  
-    	//System.out.println("public key"+keyPair.getPublic());
         ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic(); 
-        //System.out.println("public key EC"+publicKey);
         byte[] bytes = publicKey.getEncoded(); 
-        //System.out.println("public key EC bytes"+bytes);
-        //System.out.println("public key EC base64"+Base64Utils.encodeToString(bytes));
         return Base64Utils.encodeToString(bytes);  
     }  
       

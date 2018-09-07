@@ -18,6 +18,10 @@ public interface ProductMapper {
 
 	List<Product> queryByCId(@Param("companyId")Integer companyId);
 	
+	int updateProductTime(@Param("productId")Integer productId);
+	
+	
+	
 	
 	
 	

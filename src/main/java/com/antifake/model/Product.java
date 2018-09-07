@@ -10,6 +10,19 @@ public class Product {
 	private String productTitle;
 	
 	private String template;
+	
+	private String publicKey;
+	
+	public String getPublicKey() {
+		return publicKey;
+	}
+
+	public void setPublicKey(String pk) {
+		this.publicKey = pk;
+	}
+	
+	
+	
 
 	public Integer getProductId() {
 		return productId;
@@ -49,7 +62,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [productId=" + productId + ", companyId=" + companyId +  ", template=" + template + "]";
+		return "Product [productId=" + productId + ", companyId=" + companyId +  ", template=" + template + ", public key=" + publicKey+"]";
 	}
 
 }

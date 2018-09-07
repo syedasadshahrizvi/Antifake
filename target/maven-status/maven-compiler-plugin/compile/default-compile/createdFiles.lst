@@ -12,6 +12,7 @@ com\antifake\service\CompanyService.class
 com\antifake\service\impl\AntifakeServiceImpl.class
 com\antifake\model\Address.class
 com\antifake\converter\UserInfoForm2UserModelConverter.class
+com\antifake\utils\ECCUtil3.class
 com\antifake\form\CompanyForm.class
 com\antifake\form\UserInfoForm.class
 com\antifake\converter\AntifakeForm2AntifakeModelConverter.class
@@ -75,6 +76,7 @@ com\antifake\model\Antifake.class
 com\antifake\service\impl\AntifakeService2Impl.class
 com\antifake\form\ProductPropertyForm.class
 com\antifake\form\UserTelphoneForm.class
+com\antifake\utils\demo.class
 com\antifake\utils\ResultVOUtil.class
 com\antifake\converter\AddressForm2AddressModel.class
 com\antifake\service\RoleService.class

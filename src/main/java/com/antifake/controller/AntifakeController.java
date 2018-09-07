@@ -27,6 +27,7 @@ import com.antifake.form.CheckedForm;
 import com.antifake.form.CompanyForm;
 import com.antifake.model.Antifake;
 import com.antifake.model.Cipher;
+import com.antifake.model.Code;
 import com.antifake.model.Company;
 import com.antifake.service.AntifakeService;
 import com.antifake.service.AntifakeService2;
@@ -191,8 +192,6 @@ public class AntifakeController {
 	}
 	
 	
-	
-	
 	/**
 	  * <p>Description: 统计生成</p>
 	  * @author JZR  
@@ -223,6 +222,49 @@ public class AntifakeController {
 		return ResultVOUtil.success(cipherList);
 	}
 	
+	@PostMapping("/postCodes")
+	public ResultVO<List<Cipher>> listCipher(@Valid @RequestBody AntifakeForm antifakeForm,BindingResult bindingResult) throws Exception {
+		
+		
+		if(bindingResult.hasErrors()) {
+			log.error("list of cipher error, AntifakeFore = {}", antifakeForm);
+			throw new AntiFakeException(ResultEnum.PARAM_ERROR.getCode(), bindingResult.getFieldError().getDefaultMessage());
+		}
+		Code code=new Code();
+		code.setProductId(antifakeForm.getProductId());
+		code.setCodeId(antifakeForm.getUuid());
+		code.setSignature(antifakeForm.getSignature());
+		code.setQueryTimes(0);
+		code.setStatus(0);
+		code.setProdcedDay(antifakeForm.getDate().toString());
+		
+		 Boolean result=antifakeService2.postCode(code);
+		return ResultVOUtil.success(result);
+	}
+	
+	@PostMapping("/verifyCode")
+	public ResultVO<Boolean> verifyCode(@RequestBody CheckedForm checkedForm) throws Exception {
+		
+		Map<String, Object> resultMap= antifakeService2.verifyCode(checkedForm.getCodeString(),  checkedForm.getSignature());
+	
+		return ResultVOUtil.success(resultMap);
+	}
+	
+	@PostMapping("/getCode")
+	public ResultVO<Boolean> getCode(@RequestBody CheckedForm checkedForm) throws Exception {
+		
+		Map<String, Object> result=antifakeService2.getCode(checkedForm.getCodeString());
+	
+		return ResultVOUtil.success(result);
+	}
+	
+	@GetMapping("/updateCode")
+      public ResultVO<Boolean> updateCode() throws Exception {
+		
+		antifakeService2.updateCode();
+	
+		return ResultVOUtil.success();
+	}
 	
 	
 	

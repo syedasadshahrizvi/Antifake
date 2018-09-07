@@ -3,6 +3,7 @@ package com.antifake.service.impl;
 
 
 
+import java.io.File;
 import java.nio.charset.Charset;
 import java.security.interfaces.ECPrivateKey;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.jni.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -23,20 +25,28 @@ import org.springframework.util.Base64Utils;
 
 import com.alibaba.druid.util.HexBin;
 import com.antifake.mapper.ExpreMapper;
+import com.antifake.mapper.ProductMapper;
 import com.antifake.enums.CipherStatus;
 import com.antifake.enums.ResultEnum;
 import com.antifake.exception.AntiFakeException;
 import com.antifake.mapper.CipherMapper;
+import com.antifake.mapper.CodeMapper;
 import com.antifake.mapper.CompanyMapper;
+import com.antifake.mapper.CompanyProductRepository;
 import com.antifake.mapper.CompanyPubKeyRepository;
 import com.antifake.model.Antifake;
 import com.antifake.model.Cipher;
+import com.antifake.model.Code;
 import com.antifake.model.Company;
+import com.antifake.model.CompanyProduct;
 import com.antifake.model.CompanyPubKey;
 import com.antifake.model.Expre;
+import com.antifake.model.Product;
 import com.antifake.service.AntifakeService2;
 import com.antifake.utils.ECCUtil;
 import com.antifake.utils.ECCUtil2;
+import com.antifake.utils.ECCUtil4;
+import com.antifake.utils.FileUploadUtil;
 import com.antifake.utils.UUIDUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +73,18 @@ public class AntifakeService2Impl implements AntifakeService2 {
 	private CompanyMapper companyMapper;
 	
 	@Autowired
+	private CodeMapper codeMapper;
+	
+	@Autowired
+	private ProductMapper productMapper;
+	
+	
+	@Autowired
 	private CompanyPubKeyRepository companyPubKeyRepository;
+	
+	@Autowired
+	private CompanyProductRepository companyProductRepository;
+	
 
 	
 	@Override
@@ -169,6 +190,24 @@ public class AntifakeService2Impl implements AntifakeService2 {
 	
 	}
 	
+	public Boolean postCode(Code code) throws Exception
+	{
+		
+				  
+		productMapper.updateProductTime(code.getProductId());
+		
+		codeMapper.insertCode(code);
+		
+		
+		return true;
+		
+	
+	}
+	
+	
+	
+	
+	
 	
 	public Map<String, Object> verify(String codeString, String type) throws Exception {
 		
@@ -245,6 +284,239 @@ public class AntifakeService2Impl implements AntifakeService2 {
 			//	return bool;
 		return resultMap;
 	}
+	
+	
+public Map<String, Object> verifyCode(String codeString, String signature) throws Exception {
+		
+	/*	Map<String, Object> resultMap = new HashMap<>();
+	
+		String[] split = StringUtils.split(codeString, ".");
+		
+		String productId = split[0];
+		String batch = split[1];
+		//String companyId = split[2];
+		Code code = new Code();
+		//code.setCompanyId(Integer.parseInt(companyId));
+		//code.setProductId(Integer.parseInt(productId));
+		code.setCodeId(codeString);
+		Code resultCode = codeMapper.queryCode(code);
+		Expre resultCheck = expreMapper.queryExpreByCId(resultCode.getCompanyId(), batch);
+		// 校验
+		// 查询公钥
+		Company company = companyMapper.selectByPrimaryKey(resultCode.getCompanyId());
+		
+		CompanyProduct companyProduct = new CompanyProduct();
+		companyProduct.setProductId((Integer) resultCode.getProductId());
+		
+		
+		Example<CompanyProduct> example = Example.of(companyProduct);
+		List<CompanyProduct> userKeyList = companyProductRepository.findAll(example);
+		
+		
+		
+		signature = signature + resultCode.getSignature();
+		Boolean bool = false;
+		String decrypt="" ;
+		for (CompanyProduct pubKey : userKeyList) {
+			try {
+				String publicKey = pubKey.getPublicKey();
+				System.out.println(publicKey);
+				bool= ECCUtil4.mlVerify(publicKey,signature,resultCheck.getProductExpre());
+				if(bool== true)
+				{
+				decrypt= resultCheck.getProductExpre();
+				}
+				
+				System.out.println(bool);
+				
+			} catch (Exception e) {
+				log.error("【解密操作】秘钥不匹配", e);
+			}
+		}
+		
+		if (bool == true && !decrypt.isEmpty() ) {
+			resultMap.put("decrypt", resultCheck.getProductExpre());
+			// 次数解密
+			
+			
+		}else
+		{
+			throw new AntiFakeException(ResultEnum.DECRYPT_ERROR);
+		}
+		return resultMap;
+		*/
+		return new HashMap<String,Object>();
+	}
+
+public Boolean verifyToken(String token, Integer CompanyId) throws Exception {
+	
+	
+	Company company = companyMapper.selectByPrimaryKey(CompanyId);
+
+	CompanyPubKey companyPubKey = new CompanyPubKey();
+	companyPubKey.setCompanyId((Integer)company.getCompanyId());
+	companyPubKey.setStatus(0);
+	
+	Example<CompanyPubKey> example = Example.of(companyPubKey);
+	List<CompanyPubKey> userKeyList = companyPubKeyRepository.findAll(example);
+	Boolean bool=false;
+	double time =(new Date().getTime())/6000;
+	int  time1 =(int) Math.rint(time);
+	
+	for (CompanyPubKey pubKey : userKeyList) {
+		try {
+			String publicKey = pubKey.getPublicKey();
+			System.out.println(publicKey);
+			bool= ECCUtil4.mlVerify(publicKey,token,""+time1);
+			if(bool== true)
+			{
+			return true;
+			}
+			
+			System.out.println(bool);
+			
+		} catch (Exception e) {
+			log.error("【解密操作】秘钥不匹配", e);
+		}
+		
+		
+		
+	}
+	
+	int  time2 =(int) Math.rint(time-1);
+	
+	for (CompanyPubKey pubKey : userKeyList) {
+		try {
+			String publicKey = pubKey.getPublicKey();
+			System.out.println(publicKey);
+			bool= ECCUtil4.mlVerify(publicKey,token,""+time2);
+			if(bool== true)
+			{
+			return true;
+			}
+			
+			System.out.println(bool);
+			
+		} catch (Exception e) {
+			log.error("【解密操作】秘钥不匹配", e);
+		}
+		
+		
+		
+	}
+	
+	
+	
+	return false;
+}
+
+
+
+@Override
+public Map<String, Object>  getCode(String codeString) throws Exception {
+	
+	Map<String, Object> resultMap = new HashMap<>();
+	String[] split = StringUtils.split(codeString, ".");
+	
+	String productId = split[0];
+	String batch = split[1];
+	//String companyId = split[2];
+	Code code = new Code();
+	
+	code.setCodeId(codeString);
+	Code resultCode = codeMapper.queryCode(code);
+	
+	
+	
+	
+	Product product = productMapper.queryByProductId(resultCode.getProductId());
+	
+	Company company = companyMapper.selectByPrimaryKey(product.getCompanyId());
+	Expre expre=expreMapper.queryExpreByCId(product.getCompanyId(), batch);
+	
+	
+	System.out.println(company +""+resultCode+""+product);
+	
+	
+	Map<String, Object> obj= new HashMap<>();
+	obj.put("companyName", company.getCompanyName());
+	obj.put("signature", resultCode.getSignature());
+	obj.put("queryTimes", resultCode.getQueryTimes());
+	obj.put("firstQueryTimes", resultCode.getFirstQueryTime());
+	obj.put("producedDay", resultCode.getProdcedDay());
+	obj.put("status", resultCode.getStatus());
+	obj.put("productTitle", product.getProductTitle());
+	obj.put("productDetails", product.getTemplate());
+	obj.put("publicKey", product.getPublicKey());
+	obj.put("message", expre.getProductExpre());
+	
+	return obj;
+	
+	
+	
+}
+
+public void  updateCode() throws Exception {
+	
+	
+	FileUploadUtil fp= new FileUploadUtil();
+	
+	List<String> list =fp.listFilesForFolder(new File("./src/main/resources/codes/unseen/"));
+	
+	for (String fileName: list)
+	{
+		List<Map<String, Object>> list1=fp.read( fileName);
+		for(int i=0;i<list1.size();i++)
+		{
+			Map<String, Object> map=list1.get(i);
+			String uuid=(String)  map.get("uuid");
+			String sign= (String) map.get("sign");
+			
+			String[] split = StringUtils.split( uuid , ".");
+			
+			String productId = split[0];
+			String batch = split[1];
+			
+			String pattern = "yyyy-MM-dd";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+			String date = simpleDateFormat.format(new Date());
+			
+			Code code = new Code();
+			
+			code.setCodeId(uuid);
+			code.setSignature(sign);
+			code.setProductId(Integer.parseInt(productId));
+			code.setProdcedDay(date);
+			code.setQueryTimes(0);
+			code.setStatus(0);
+			Code code1= codeMapper.queryCode(code);
+			//Product product = productMapper.queryByProductId(code1.getProductId());
+			
+			if(code1== null)
+			{
+			codeMapper.insertCode(code);
+			}
+			else
+			{
+				log.error("codeId already exists"+uuid , uuid);
+			}
+			
+			
+		}
+	}
+	
+	
+	
+	
+}
+
+
+
+
+
+	
+	
 	
 	@Override
 	public List<Cipher> listCipher(Antifake antifake,String orderBy,Integer pageNum,Integer pageSize) throws Exception {

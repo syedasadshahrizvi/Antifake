@@ -12,4 +12,8 @@ public class CheckedForm {
 	/**	姓名*/
 	@NotEmpty(message="type is empty")
 	private String type;
+	
+	@NotEmpty(message="Signature is empty")
+	private String signature;
+	
 }

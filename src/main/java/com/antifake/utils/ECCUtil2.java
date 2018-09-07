@@ -1,6 +1,7 @@
 package com.antifake.utils;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -26,13 +27,16 @@ import org.bouncycastle.jce.interfaces.ECPublicKey;
 import org.bouncycastle.jce.interfaces.ECPrivateKey;
 
 import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DEROctetString;
+import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
- 
+
 
 import com.alibaba.druid.util.HexBin;
 
@@ -82,21 +86,34 @@ public class ECCUtil2 {
     	
     	 signature.update(template.getBytes("UTF-8"));
     	 byte []arr = signature.sign();
-    	
-    /*	 System.out.println("Hexbin"+ HexBin.encode(arr));
-    	 System.out.println("Hexbin"+ HexBin.encode(arr).length());
-    	DerInputStream din=new DerInputStream(arr);
-        DerValue[] value=din.getSequence(0);
-        System.out.println(value[0].getBigInteger());
-        DerInputStream din2=new DerInputStream(value[1].toByteArray());
-        System.out.println("der"+din2.getBigInteger().toString().length());
-    	*/
-    	
-    	
-    	// return Base64.getEncoder().encodeToString(arr);
+    	 System.out.println("arr length"+arr);
+    	/* ASN1Primitive asn1 = toAsn1Primitive(arr);
+    	 BigInteger[] rs=new BigInteger[2];
+         if (asn1 instanceof ASN1Sequence) {
+             ASN1Sequence asn1Sequence = (ASN1Sequence) asn1;
+             ASN1Encodable[] asn1Encodables = asn1Sequence.toArray();
+             int i=0;
+            
+             for (ASN1Encodable asn1Encodable : asn1Encodables) {
+                 ASN1Primitive asn1Primitive = asn1Encodable.toASN1Primitive();
+                 if (asn1Primitive instanceof ASN1Integer) {
+                     ASN1Integer asn1Integer = (ASN1Integer) asn1Primitive;
+                     BigInteger integer = asn1Integer.getValue();
+                     System.out.println("value"+integer.toString());
+                     System.out.println("length"+integer.toString().length());
+                    rs[i]=integer;
+                    i++;
+                 }
+                
+                 
+             }
+             
+         }*/
+       
     	 return HexBin.encode(arr);
     }
 	   
+	 
 	 private static ASN1Primitive toAsn1Primitive(byte[] data) throws Exception
 	    {
 	        try (ByteArrayInputStream inStream = new ByteArrayInputStream(data);
@@ -106,14 +123,13 @@ public class ECCUtil2 {
 	        }
 	    }
 	 
-	 
 	  public static boolean verify(String template ,  String arr, String pubStr)  throws Exception {
 		  
 		//  System.out.println("jdk ecdsa sign hex decoding  :"+ HexBin.decode(arr));
-		   byte[] keyBytes = Base64Utils.decodeFromString(pubStr);  
-	        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);  
-	        KeyFactory keyFactorys = KeyFactory.getInstance("EC");  
-	        ECPublicKey ecPublicKey = (ECPublicKey) keyFactorys.generatePublic(keySpec); 
+		     byte[] keyBytes = Base64Utils.decodeFromString(pubStr);  
+	         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);  
+	         KeyFactory keyFactorys = KeyFactory.getInstance("EC");  
+	         ECPublicKey ecPublicKey = (ECPublicKey) keyFactorys.generatePublic(keySpec); 
 		  
 	    	 X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(ecPublicKey.getEncoded());
 	    	 KeyFactory keyFactory = KeyFactory.getInstance("EC");

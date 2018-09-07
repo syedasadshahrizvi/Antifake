@@ -1,5 +1,6 @@
 package com.antifake.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -71,5 +72,7 @@ public interface CipherMapper {
 	  * @date 2018年5月31日
 	  */
 	Integer getUseCount(@Param("batch")String batch);
+	
+	int insertCode(@Param("productId")Integer productId,@Param("signature")String signature,@Param("codeId")String codeId,@Param("status")Integer status,@Param("date")Date date,@Param("queryTime")Integer queryTime,@Param("companyId")Integer companyId );
 
 }

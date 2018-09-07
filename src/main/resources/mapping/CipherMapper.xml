@@ -85,4 +85,8 @@
   	select count(cipher_id) from antifake_cipher where batch = #{batch} and count != 0
   </select>
   
+  <insert id="insertCode"> insert into codes (code_id,product_id,signature,status,prodced_day,query_times,company_id) values (#{codeId,jdbcType=VARCHAR},#{productId,jdbcType=INTEGER},#{signature,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT},#{date,jdbcType=DATE},#{queryTime,jdbcType=INTEGER},#{companyId,jdbcType=INTEGER}) </insert>
+  
+  
+  
 </mapper>

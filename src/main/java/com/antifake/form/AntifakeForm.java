@@ -1,5 +1,7 @@
 package com.antifake.form;
 
+import java.util.Date;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.Data;
@@ -12,6 +14,10 @@ public class AntifakeForm {
 	private Integer companyId;//公司id
 	
 	private Integer productId;//产品编码
+	
+	private String uuid;
+	
+	private Date date;
 	
 	private String template;//模板
 	
@@ -29,7 +35,6 @@ public class AntifakeForm {
 	
 	private String end;
 	
-
 	private String batch;
 	
 }

@@ -19,7 +19,7 @@ public interface AntifakeService {
 	List<String> encrypt2(String privateKey,Integer companyId, Integer productId, String template, Integer count);
 	
 	
-
+	
 	/**
 	  * <p>Description: 解密</p>
 	  * @author JZR  
