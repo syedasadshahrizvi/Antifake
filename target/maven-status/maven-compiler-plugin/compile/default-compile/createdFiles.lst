@@ -1,8 +1,10 @@
 com\antifake\utils\ImgCodeUtils.class
 com\antifake\interceptor\ConfInterceptor.class
+com\antifake\mapper\CodeMapper.class
 com\antifake\service\UserService.class
 com\antifake\controller\UserKeyController.class
 com\antifake\service\impl\CompanyServiceImpl.class
+com\antifake\utils\FileUploadUtil.class
 com\antifake\form\ProductForm.class
 com\antifake\VO\ResultVO.class
 com\antifake\service\AntifakeService2.class
@@ -19,6 +21,7 @@ com\antifake\converter\AntifakeForm2AntifakeModelConverter.class
 com\antifake\service\impl\RoleServiceImpl.class
 com\antifake\controller\CodeController.class
 com\antifake\mapper\PubKeyMapper.class
+com\antifake\model\CompanyProduct.class
 com\antifake\form\UserRegistForm.class
 com\antifake\controller\UserController.class
 com\antifake\controller\ProductController.class
@@ -37,6 +40,7 @@ com\antifake\model\Product.class
 com\antifake\controller\CompanyController.class
 com\antifake\enums\CodeEnum.class
 com\antifake\service\impl\KeyServiceImpl.class
+com\antifake\utils\ECCUtil4.class
 com\antifake\config\RedisConfig.class
 com\antifake\model\Company.class
 com\antifake\converter\UserRepetition2UserModelConverter.class
@@ -71,6 +75,7 @@ com\antifake\mapper\UserMapper.class
 com\antifake\enums\CipherStatus.class
 com\antifake\mapper\ExpreMapper.class
 com\antifake\service\KeyService.class
+com\antifake\mapper\CompanyProductRepository.class
 com\antifake\mapper\ScoreMapper.class
 com\antifake\model\Antifake.class
 com\antifake\service\impl\AntifakeService2Impl.class
@@ -88,6 +93,7 @@ com\antifake\service\impl\ProductServiceImpl.class
 com\antifake\mapper\ProductPropertyRepository.class
 com\antifake\model\PrivateKey.class
 com\antifake\utils\FileUtil.class
+com\antifake\model\Code.class
 com\antifake\form\UserChpwdForm.class
 com\antifake\utils\MD5Utils.class
 com\antifake\form\AntifakeForm.class

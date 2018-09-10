@@ -6,19 +6,19 @@
     <result column="company_id" property="companyId" jdbcType="INTEGER" />
       <result column="product_title" property="productTitle" jdbcType="VARCHAR" />
     <result column="product_details" property="template" jdbcType="VARCHAR" />
+    <result column="public_key" property="publicKey" jdbcType="VARCHAR" />
   </resultMap>
  
   
   
   <sql id="Base_Column_List" >
-    product_id, company_id,product_title, product_details
+    product_id, company_id,product_title, product_details,public_key
   </sql>
   <sql id="Base_Column_List1" >
     product_id, product_title
   </sql>
   <insert id="createProduct" parameterType="com.antifake.model.Product" >
-    insert into company_product (company_id,product_details,product_title
-      )
+    insert into company_product (company_id,product_details,product_title)
     values (#{companyId,jdbcType=INTEGER}, #{template,jdbcType=VARCHAR},#{productTitle,jdbcType=VARCHAR}
       )
   </insert>

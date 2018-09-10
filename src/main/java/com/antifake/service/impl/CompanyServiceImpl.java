@@ -143,7 +143,7 @@ public class CompanyServiceImpl implements CompanyService{
 		
 		HashMap<String, Object> map = ECCUtil.getPublickey();
 		String privatekey=(String)map.get("1");
-		String cert=(String)map.get("2");
+		//String cert=(String)map.get("2");
 		
 		
 		companyMapper.insertPKey(privatekey, id,0);

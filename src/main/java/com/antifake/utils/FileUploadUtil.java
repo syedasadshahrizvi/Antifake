@@ -1,19 +1,19 @@
 package com.antifake.utils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
+
 import java.nio.file.Paths;
-import java.text.ParseException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -40,7 +40,7 @@ public class FileUploadUtil {
     
             
          
-            Iterator itr = json.iterator();
+            Iterator<?> itr = json.iterator();
             int i=0;
            // itr.next();
             while(itr.hasNext())
@@ -82,13 +82,21 @@ public class FileUploadUtil {
 	
 	public List<String> listFilesForFolder(final File folder) {
 		List<String> list = new ArrayList<>();
+		if(folder.exists())
+		{
+		
 	    for (final File fileEntry : folder.listFiles()) {
 	        
 	    	list.add(fileEntry.getName());
 	            
 	        }
-	    return list;
+	   
+	    }else {
+	    	System.out.println("folder does not exists");
 	    }
+		
+		 return list;
+	}
 	
 	public static void main(String[] args) throws org.json.simple.parser.ParseException, IOException {
 		

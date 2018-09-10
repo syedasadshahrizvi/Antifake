@@ -52,6 +52,7 @@ C:\Users\sa\git\antifake\src\main\java\com\antifake\converter\AddressForm2Addres
 C:\Users\sa\git\antifake\src\main\java\com\antifake\service\impl\ProductServiceImpl.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\form\ProductForm.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\converter\UserRepetition2UserModelConverter.java
+C:\Users\sa\git\antifake\src\main\java\com\antifake\model\Code.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\model\CompanyPubKey.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\exception\AntiFakeException.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\utils\RegExUtils.java
@@ -77,15 +78,19 @@ C:\Users\sa\git\antifake\src\main\java\com\antifake\utils\demo.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\utils\VerifyUtil.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\utils\ECCUtil3.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\controller\UserController.java
+C:\Users\sa\git\antifake\src\main\java\com\antifake\utils\FileUploadUtil.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\service\AntifakeService2.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\service\impl\ProductPropertyServiceImpl.java
+C:\Users\sa\git\antifake\src\main\java\com\antifake\model\CompanyProduct.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\utils\MD5Utils.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\converter\UserInfoForm2UserModelConverter.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\service\impl\AntifakeService2Impl.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\service\KeyService.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\converter\CompanyForm2CompanyModelConverter.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\VO\ExpreVO.java
+C:\Users\sa\git\antifake\src\main\java\com\antifake\mapper\CompanyProductRepository.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\converter\ProductPropertyForm2ProductProperty.java
+C:\Users\sa\git\antifake\src\main\java\com\antifake\utils\ECCUtil4.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\service\impl\RoleServiceImpl.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\model\PrivateKey.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\converter\UserForm2UserModelConverter.java
@@ -102,4 +107,5 @@ C:\Users\sa\git\antifake\src\main\java\com\antifake\mapper\PrivateKeyMapper.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\service\AntifakeService.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\model\Antifake.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\model\Score.java
+C:\Users\sa\git\antifake\src\main\java\com\antifake\mapper\CodeMapper.java
 C:\Users\sa\git\antifake\src\main\java\com\antifake\service\impl\AntifakeServiceImpl.java

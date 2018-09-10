@@ -44,7 +44,28 @@ public class ECCUtil4 {
 	    return signer.verifySignature(hash, R, S);
 	}
    
+	/*private void showProdDetails(String ProdDetails,String companyName,String producedDate) {
+	    TextView prod_details = findViewById(R.id.prod_details);
+	    try {
+	        JSONObject mlProdBody = new JSONObject(ProdDetails);
+	        Iterator<?> it = mlProdBody.keys();
+	        while(it.hasNext()) {
+	           String key = it.next().toString();
+	           String val = mlProdBody.getString(key);
+	            prod_details.append(key + mlProdBody.getString(key));
+	           //如果是保质期项目，去比较生产日期
+	            if ((key=="保质期")&&(val != "-1"))
+	            compDate(producedDate, val);
+	            //如果是生产商项目，去比较名称是否一致
+	            if ((key=="生产商")&&(val != companyName))
+	                showVerifyResult("ERROR！", "假冒产品！该产品实际生产商是：" + companyName);
 
+	        }
+	    }
+	            catch (JSONException e){
+	            e.printStackTrace();
+	        }
+	 }*/
 	public static void main(String args[]) throws Exception
     {
 		
@@ -71,9 +92,7 @@ public class ECCUtil4 {
 //		System.out.println(b1);
 //		System.out.println(date);
 		
-		
-		
-		
+	
     }
     
     

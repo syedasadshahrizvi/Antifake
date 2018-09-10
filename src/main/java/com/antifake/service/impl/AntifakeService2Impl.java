@@ -83,7 +83,7 @@ public class AntifakeService2Impl implements AntifakeService2 {
 	private CompanyPubKeyRepository companyPubKeyRepository;
 	
 	@Autowired
-	private CompanyProductRepository companyProductRepository;
+	//private CompanyProductRepository companyProductRepository;
 	
 
 	
@@ -161,7 +161,7 @@ public class AntifakeService2Impl implements AntifakeService2 {
 	{
 		  
 		List<Cipher> listCipher = new ArrayList<Cipher>();
-		List<String> listString = new ArrayList<String>();	
+		
 			
 		Expre expre = new Expre();
 		expre.setCompanyId(companyId);
@@ -415,12 +415,12 @@ public Boolean verifyToken(String token, Integer CompanyId) throws Exception {
 @Override
 public Map<String, Object>  getCode(String codeString) throws Exception {
 	
-	Map<String, Object> resultMap = new HashMap<>();
+
 	String[] split = StringUtils.split(codeString, ".");
 	
-	String productId = split[0];
+
 	String batch = split[1];
-	//String companyId = split[2];
+	String companyId = split[2];
 	Code code = new Code();
 	
 	code.setCodeId(codeString);
@@ -463,6 +463,12 @@ public void  updateCode() throws Exception {
 	
 	List<String> list =fp.listFilesForFolder(new File("./src/main/resources/codes/unseen/"));
 	
+	if(list== null )
+	{
+		log.error("Files does not exists");
+	}else
+	{
+	
 	for (String fileName: list)
 	{
 		List<Map<String, Object>> list1=fp.read( fileName);
@@ -502,7 +508,7 @@ public void  updateCode() throws Exception {
 				log.error("codeId already exists"+uuid , uuid);
 			}
 			
-			
+		}
 		}
 	}
 	
