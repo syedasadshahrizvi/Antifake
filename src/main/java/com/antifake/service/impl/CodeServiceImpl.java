@@ -1,5 +1,6 @@
 package com.antifake.service.impl;
 
+import io.github.pixee.security.Newlines;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.TimeUnit;
 
@@ -56,7 +57,7 @@ public class CodeServiceImpl implements CodeService{
         //将验证码存入缓存中   
         String codeId = CodeEnum.CODE_ID.getCode() + "_" + UUIDUtil.get32UUID();
         redisTemplate.opsForValue().set(codeId, objs[0].toString(), 30, TimeUnit.MINUTES);
-        response.setHeader(CodeEnum.CODE_ID.getCode(), codeId);
+        response.setHeader(CodeEnum.CODE_ID.getCode(), Newlines.stripAll(codeId));
         //将图片输出给浏览器    
         BufferedImage image = (BufferedImage) objs[1]; 
 		return image;
