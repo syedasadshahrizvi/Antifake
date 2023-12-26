@@ -35,7 +35,7 @@ public class CodeServiceImpl implements CodeService{
 		//发送验证码
 		String templateParam = "{\"code\":\"" + captcha + "\"}";
 		String status = SendSmsUtil.sendCodeSms(telphone, templateParam);
-		if(status.equals("success")) {
+		if("success".equals(status)) {
 			//发送成功保存验证码
 			redisTemplate.opsForValue().set("code_"+telphone, captcha,30,TimeUnit.MINUTES);
 		}
