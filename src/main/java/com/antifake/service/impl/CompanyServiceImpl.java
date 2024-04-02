@@ -1,5 +1,6 @@
 package com.antifake.service.impl;
 
+import io.github.pixee.security.Newlines;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -92,7 +93,7 @@ public class CompanyServiceImpl implements CompanyService{
 		String fileName =""+id+".cer";
 		res.setHeader("content-type", "application/octet-stream");
 		res.setContentType("application/octet-stream");
-		res.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+		res.setHeader("Content-Disposition", Newlines.stripAll("attachment;filename=" + fileName));
 		byte[] buff = new byte[1024];
 		BufferedInputStream bis = null;
 		OutputStream os = null;
