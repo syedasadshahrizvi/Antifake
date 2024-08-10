@@ -1,5 +1,6 @@
 package com.antifake.utils;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +26,7 @@ public class SendSmsUtil {
     public static String getCaptcha() {
         String str = "0,1,2,3,4,5,6,7,8,9";
         String str2[] = str.split(",");// 将字符串以,分割
-        Random rand = new Random();// 创建Random类的对象rand
+        Random rand = new SecureRandom();// 创建Random类的对象rand
         int index = 0;
         String randStr = "";// 创建内容为空字符串对象randStr
         randStr = "";// 清空字符串对象randStr中的值
