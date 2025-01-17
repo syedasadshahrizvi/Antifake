@@ -1,5 +1,6 @@
 package com.antifake.controller;
 
+import io.github.pixee.security.Newlines;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -178,7 +179,7 @@ public class UserController {
 		UserVO userVO = userService.loginByUsernameOrtelPhone(user);
 		// 添加token
 		String get32uuid = UUIDUtil.get32UUID();
-			response.setHeader(r_token, get32uuid);
+			response.setHeader(r_token, Newlines.stripAll(get32uuid));
 			Cookie cookie = new Cookie(u_token, get32uuid);
 			cookie.setMaxAge(30 * 24 * 60 * 60);// 设置为30天
 			cookie.setPath("/");
@@ -202,7 +203,7 @@ public class UserController {
 		UserVO userVO = userService.findByTelphone(userTelphoneForm.getTelphone());
 		// 添加token
 		String get32uuid = UUIDUtil.get32UUID();
-			response.setHeader(r_token, get32uuid);
+			response.setHeader(r_token, Newlines.stripAll(get32uuid));
 		/*		
 			Cookie cookie = new Cookie(u_token, get32uuid);
 			cookie.setMaxAge(30 * 24 * 60 * 60);// 设置为30min
