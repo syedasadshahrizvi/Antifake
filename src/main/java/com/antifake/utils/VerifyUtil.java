@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.security.SecureRandom;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -54,7 +55,7 @@ public class VerifyUtil {
 			// 4.绘制矩形背景  
 			graphic.fillRect(0, 0, WIDTH, HEIGHT);  
 			// 5.画随机字符  
-			Random ran = new Random();  
+			Random ran = new SecureRandom();  
 			for (int i = 0; i <SIZE; i++) {  
 				// 取随机字符索引  
 				int n = ran.nextInt(chars.length);  
@@ -85,7 +86,7 @@ public class VerifyUtil {
 		 * 随机取色 
 		 */  
 		public static Color getRandomColor() {  
-			Random ran = new Random();  
+			Random ran = new SecureRandom();  
 			Color color = new Color(ran.nextInt(256),   
 					ran.nextInt(256), ran.nextInt(256));  
 			return color;  
