@@ -2,6 +2,7 @@ package com.antifake.utils;
 
 
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +50,7 @@ public class demo {
 			
 				try{ 
 					 br = new BufferedReader(new InputStreamReader(in));
-					 while ((line = br.readLine()) != null) 
+					 while ((line = BoundedLineReader.readLine(br, 5_000_000)) != null) 
 					 {
 						 System.out.println(line); 
 					 sb.append(line);
